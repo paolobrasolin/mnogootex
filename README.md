@@ -1,0 +1,1 @@
+Mnogootex (многоꙮтех) is a device to handle the compilation of TeX sources with different preambles. 
