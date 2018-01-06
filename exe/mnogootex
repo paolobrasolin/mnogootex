@@ -27,7 +27,7 @@ if ARGV.length == 3
   job = Mnogootex::Job.new cls: ARGV[2], target: File.expand_path(target)
   pdf = Dir.glob("#{job.tmp_dirname}/*.pdf").first
   raise "PDF non esiste." unless File.exist? pdf
-  `open #{pdf}`
+  `command -v open >/dev/null && open #{pdf} || xdg-open #{pdf}`
   exit
 end
 
