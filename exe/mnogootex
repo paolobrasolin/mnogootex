@@ -26,7 +26,6 @@ main_dirname = File.dirname main_path
 
 cfg = Mnogootex::Configuration.new
 cfg.load main_dirname
-puts cfg
 
 raise "File non esiste." unless File.exist? main_path
 
