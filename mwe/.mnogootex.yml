@@ -1,0 +1,9 @@
+compile_with:
+  - book
+  - article
+  - scrartcl
+  - scrbook
+
+classes:
+  RSMUP:
+    path: /Users/paolobrasolin/pb/mnogootex/mnogootex_classes/classes/RSMUP/RSMUP.cls
