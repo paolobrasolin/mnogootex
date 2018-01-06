@@ -3,7 +3,6 @@
 
 require 'mnogootex'
 
-puts "Mnogootex v#{Mnogootex::VERSION}"
 
 # require 'pathname'
 
@@ -19,6 +18,20 @@ require 'open3'
 require 'colorize'
 
 target = ARGV[0]
+
+
+raise "No parameters given." if ARGV.length.zero?
+
+if ARGV.length == 3
+  raise "Unknown command." unless %w{show view open}.include? ARGV[1].downcase
+  job = Mnogootex::Job.new cls: ARGV[2], target: File.expand_path(target)
+  pdf = Dir.glob("#{job.tmp_dirname}/*.pdf").first
+  raise "PDF non esiste." unless File.exist? pdf
+  `open #{pdf}`
+  exit
+end
+
+puts "Mnogootex v#{Mnogootex::VERSION}"
 
 main_path = File.expand_path(target)
 main_basename = File.basename main_path

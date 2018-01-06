@@ -1,3 +1,7 @@
+require 'digest'
+require 'tmpdir'
+require 'pathname'
+
 module Mnogootex
   class Job
     attr_reader :thread, :stdout_stderr, :log, :ticks, :cls
@@ -11,18 +15,22 @@ module Mnogootex
       @cls = cls
       @log = []
       @ticks = 0
+
+      @id = Digest::MD5.hexdigest(@cls + @main_path)
     end
 
     def success?
       @thread.value.exitstatus == 0
     end
 
+    def tmp_dirname
+      @tmp_dirname ||= Pathname(Dir.tmpdir).join("mnogootex-#{@id}")
+    end
+
     def setup
-      @tmp_dirname = Dir.mktmpdir ['mnogootex-']
+      FileUtils.cp_r File.join(@main_dirname, '.'), tmp_dirname
 
-      FileUtils.cp_r File.join(@main_dirname, '.'), @tmp_dirname
-
-      @path = File.join @tmp_dirname, @main_basename
+      @path = File.join tmp_dirname, @main_basename
 
       code = File.read @path
       replace = code.sub /\\documentclass(\[.*?\])?{.*?}/,
@@ -42,7 +50,7 @@ module Mnogootex
         "--shell-escape", # TODO: remove me!
         "--interaction=nonstopmode",
         @main_basename,
-        chdir: @tmp_dirname
+        chdir: tmp_dirname
       )
     end
 
