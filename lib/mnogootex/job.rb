@@ -18,7 +18,7 @@ module Mnogootex
       @ticks = 0
       @streaming = true
 
-      @id = Base64.urlsafe_encode64 Digest::MD5.hexdigest(@main_path)
+      @source_id = Base64.urlsafe_encode64 Digest::MD5.digest(@main_path)
     end
 
     def success?
@@ -26,11 +26,12 @@ module Mnogootex
     end
 
     def tmp_dirname
-      @tmp_dirname ||= Pathname(Dir.tmpdir).join("mnogootex-#{@id}-#{@cls}")
+      @tmp_dirname ||= Pathname.new(Dir.tmpdir).join('mnogootex', @source_id, @cls)
     end
 
     def setup
       FileUtils.rm_r tmp_dirname, secure: true if tmp_dirname.directory?
+      FileUtils.mkdir_p tmp_dirname
 
       # TODO: cleanup target folder
       FileUtils.cp_r File.join(@main_dirname, '.'), tmp_dirname
