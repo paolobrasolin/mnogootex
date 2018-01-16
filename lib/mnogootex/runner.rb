@@ -37,6 +37,10 @@ module Mnogootex
       @threads.map(&:join)
 
       puts # terminate last line redraw by stata_drawer
+      print_details
+    end
+
+    def print_details
       puts '  Details:'
       @jobs.each do |job|
         if job.success?
