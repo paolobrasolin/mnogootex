@@ -1,7 +1,13 @@
-require "mnogootex/version"
-require "mnogootex/configuration"
-require "mnogootex/job"
+require 'mnogootex/version'
+require 'mnogootex/configuration'
+require 'mnogootex/job'
+require 'mnogootex/cli'
+require 'mnogootex/runner'
+
+require 'pathname'
 
 module Mnogootex
-  # Your code goes here...
+  def self.root
+    Pathname.new(__dir__).parent
+  end
 end

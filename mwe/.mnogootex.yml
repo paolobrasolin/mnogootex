@@ -1,4 +1,5 @@
-compile_with:
+main: mwe.tex
+jobs:
   - book
   - article
   - scrartcl

@@ -2,95 +2,43 @@
 # coding: utf-8
 
 require 'mnogootex'
-
-
-# require 'pathname'
-
-# target = ARGV[0]
-# target_path = File.expand_path target
-# cfg = Mnogootex::Configuration.new
-# cfg.load target_path
-
 require 'tmpdir'
 require 'fileutils'
 require 'open3'
-
 require 'colorize'
-
-target = ARGV[0]
-
 
 raise "No parameters given." if ARGV.length.zero?
 
-if ARGV.length == 3
-  raise "Unknown command." unless %w{show view open}.include? ARGV[1].downcase
-  job = Mnogootex::Job.new cls: ARGV[2], target: File.expand_path(target)
-  pdf = Dir.glob("#{job.tmp_dirname}/*.pdf").first
-  raise "PDF non esiste." unless File.exist? pdf
-  `command -v open >/dev/null && open #{pdf} || xdg-open #{pdf}`
-  exit
-end
+main, cfg = Mnogootex::CLI.recombobulate
 
-puts "Mnogootex v#{Mnogootex::VERSION}"
-
-main_path = File.expand_path(target)
-main_basename = File.basename main_path
-main_dirname = File.dirname main_path
-
-cfg = Mnogootex::Configuration.new
-cfg.load main_dirname
-
-raise "File non esiste." unless File.exist? main_path
-
-@documentclasses = cfg['compile_with']
-
-$jobs = []
-$threads = []
-$draw_threads = []
-
-$threads = []
-
-$anim = cfg['animation'].freeze
-
-STDOUT.sync = true
-
-def draw_status
-  icons = $jobs.map do |j|
-    icon = $anim[j.ticks % $anim.length]
-    case j.thread.status
-    when 'sleep', 'run', 'aborting'
-      icon.yellow
-    when false, nil # exited (normally or w/ error)
-      j.success? ? icon.green : icon.red
-    end
-  end
-  print '  Jobs: ' + icons.join + "\r"
-end
-
-draw_status
-
-@documentclasses.each_with_index do |cls, index|
-  job = Mnogootex::Job.new cls: cls, target: main_path
-  job.setup
-  job.run
-
-  $jobs << job
-
-  $draw_threads << job.tick_thread
-  $threads << job.thread
-end
-
-$threads.map(&:join)
-$draw_threads.map(&:join)
-
-puts
-
-puts '  Details:'
-$jobs.each do |job|
-  if job.success?
-    puts '    ' + "✔".green + ' ' + File.basename(job.cls)
+case ARGV[0].downcase
+when 'mnogoo'
+  puts Mnogootex.root.join('mnogoo.sh')
+when 'clobber'
+  Mnogootex::CLI.clobber
+when 'cd'
+  raise "The 'cd' command can only be invoked through 'mnogoo'."
+when 'pdf'
+  # raise "PDF non esiste." unless File.exist? pdf
+  # `command -v open >/dev/null && open #{pdf} || xdg-open #{pdf}`
+  # exit
+when 'path'
+  case ARGV.length
+  when 1
+    # get source path
+    puts main.dirname
+    exit
+  when 2, 3
+    job = Mnogootex::Job.new cls: ARGV[1], target: main
+    # TODO: check that it was configured and built
+    puts job.tmp_dirname
+    exit
   else
-    puts '    ' + "✘".red + ' ' + File.basename(job.cls)
-    puts job.log[2..-2].join.gsub(/^/,' '*6).chomp.red
+    puts ARGV.inspect
+    raise 'Malformed.'
   end
+when 'run'
+  Mnogootex::Runner.new(source: main, configuration: cfg).start
+else
+  raise 'unknown command'
 end

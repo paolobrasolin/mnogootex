@@ -15,7 +15,7 @@ module Mnogootex
       merge! DEFAULT
     end
 
-    def load(pathname = Dir.pwd)
+    def load(pathname = Pathname.pwd)
       scan_cfg Pathname(pathname)
       filter_cfg
       merge! load_cfg

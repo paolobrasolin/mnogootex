@@ -1,12 +1,14 @@
 require 'digest'
 require 'tmpdir'
 require 'pathname'
+require 'base64'
 
 module Mnogootex
   class Job
     attr_reader :thread, :stdout_stderr, :log, :ticks, :cls
 
-    def initialize(cls:, target:)
+    def initialize(cls:, target:, runner:)
+      @runner = runner
       @main_path = File.expand_path target
       @main_basename = File.basename @main_path
       @main_dirname = File.dirname @main_path
@@ -16,7 +18,7 @@ module Mnogootex
       @log = []
       @ticks = 0
 
-      @id = Digest::MD5.hexdigest(@cls + @main_path)
+      @id = Base64.urlsafe_encode64 Digest::MD5.hexdigest(@main_path)
     end
 
     def success?
@@ -24,10 +26,13 @@ module Mnogootex
     end
 
     def tmp_dirname
-      @tmp_dirname ||= Pathname(Dir.tmpdir).join("mnogootex-#{@id}")
+      @tmp_dirname ||= Pathname(Dir.tmpdir).join("mnogootex-#{@id}-#{@cls}")
     end
 
     def setup
+      FileUtils.rm_r tmp_dirname, secure: true if tmp_dirname.directory?
+
+      # TODO: cleanup target folder
       FileUtils.cp_r File.join(@main_dirname, '.'), tmp_dirname
 
       @path = File.join tmp_dirname, @main_basename
@@ -39,6 +44,9 @@ module Mnogootex
       File.open @path, "w" do |file|
         file.puts replace
       end
+
+      FileUtils.rm tmp_dirname.join('.mnogootex.yml')
+      tmp_dirname.join('.mnogootex.main').make_symlink(@main_path)
     end
 
     def run
@@ -61,14 +69,14 @@ module Mnogootex
           sleep 0.05
           @log << line
           @ticks += 1
-          draw_status
+          @runner.draw_status
           break unless @thread.alive?
         end
         # end of life treatment
         lines = @stdout_stderr.read.lines
         @log.concat lines
         @ticks += lines.length
-        draw_status
+        @runner.draw_status
       end
     end
   end
