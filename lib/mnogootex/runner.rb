@@ -1,10 +1,13 @@
 # coding: utf-8
+
 module Mnogootex
   class Runner
     attr_reader :source, :configuration
 
     def initialize(source:, configuration:)
       @mutex = Mutex.new
+      @covar = ConditionVariable.new
+
       @source = source
       @configuration = configuration
 
@@ -12,33 +15,28 @@ module Mnogootex
 
       @jobs = []
       @threads = []
-      @draw_threads = []
 
-      @threads = []
-
-      STDOUT.sync = true
+      # STDOUT.sync = true
     end
 
     def start
-      puts "Mnogootex v#{Mnogootex::VERSION}"
-
-      draw_status
-
       configuration['jobs'].each do |cls|
-        @jobs << Mnogootex::Job.new(cls: cls, target: source, runner: self)
+        @jobs << Mnogootex::Job.new(cls: cls, target: source)
       end
 
       @jobs.map(&:setup)
-      @jobs.map(&:run)
-      @draw_threads = @jobs.map(&:tick_thread)
-      @threads = @jobs.map(&:thread)
+
+      @threads << stata_drawer
+
+      @jobs.each do |job|
+        job.run
+        @threads << job.thread
+        @threads << job.stream_poller(method(:synced_signaler))
+      end
 
       @threads.map(&:join)
-      @draw_threads.map(&:join)
 
-      # Wait for completion
-
-      puts
+      puts # terminate last line redraw by stata_drawer
       puts '  Details:'
       @jobs.each do |job|
         if job.success?
@@ -50,7 +48,7 @@ module Mnogootex
       end
     end
 
-    def draw_status
+    def redraw_status
       icons = @jobs.map do |j|
         icon = @anim[j.ticks % @anim.length]
         case j.thread.status
@@ -61,6 +59,32 @@ module Mnogootex
         end
       end
       print '  Jobs: ' + icons.join + "\r"
+    end
+
+  private
+
+    def stata_drawer
+      @state_logger ||= Thread.new do
+        synced_while ->() { @jobs.map(&:streaming).any? } do
+          redraw_status
+        end
+      end
+    end
+
+    def synced_signaler
+      @mutex.synchronize do
+        yield
+        @covar.signal
+      end
+    end
+
+    def synced_while(condition)
+      @mutex.synchronize do
+        while condition.call
+          @covar.wait(@mutex)
+          yield
+        end
+      end
     end
   end
 end
