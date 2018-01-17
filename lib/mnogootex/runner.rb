@@ -77,7 +77,7 @@ module Mnogootex
 
     def synced_signaler
       @mutex.synchronize do
-        yield
+        yield if block_given?
         @covar.signal
       end
     end

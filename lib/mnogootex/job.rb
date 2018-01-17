@@ -69,7 +69,8 @@ module Mnogootex
           loop do
             line = @stdout_stderr.gets
             break unless !line.nil? || @thread.alive?
-            synced_signaler.call { @ticks += 1 }
+            @ticks += 1
+            synced_signaler.call
             @log << line
             sleep delay if @thread.alive?
           end
