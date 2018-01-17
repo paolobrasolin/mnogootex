@@ -29,7 +29,7 @@ module Mnogootex
       @threads << stata_drawer
 
       @jobs.each do |job|
-        job.run
+        job.run(configuration['commandline'])
         @threads << job.thread
         @threads << job.stream_poller(method(:synced_signaler))
       end
@@ -47,7 +47,8 @@ module Mnogootex
           puts '    ' + "✔".green + ' ' + File.basename(job.cls)
         else
           puts '    ' + "✘".red + ' ' + File.basename(job.cls)
-          puts job.log[2..-2].join.gsub(/^/,' '*6).chomp.red
+          # puts job.log[2..-2].join.gsub(/^/,' '*6).chomp.red
+          puts job.log.join.gsub(/^/,' '*6).chomp.red
         end
       end
     end

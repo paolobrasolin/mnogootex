@@ -8,6 +8,6 @@ require 'pathname'
 
 module Mnogootex
   def self.root
-    Pathname.new(__dir__).parent
+    Pathname.new(__dir__).join('mnogootex')
   end
 end

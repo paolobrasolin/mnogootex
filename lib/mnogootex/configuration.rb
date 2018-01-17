@@ -4,9 +4,7 @@ require 'yaml'
 
 module Mnogootex
   class Configuration < Hash
-    DEFAULT = {
-      'animation' => '⣾⣽⣻⢿⡿⣟⣯⣷'
-    }
+    DEFAULT = YAML.load_file Pathname.new(__dir__).join('configuration', 'default.yml')
 
     CFG_FILENAME = '.mnogootex.yml'.freeze
 

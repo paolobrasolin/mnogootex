@@ -50,20 +50,15 @@ module Mnogootex
       tmp_dirname.join('.mnogootex.main').make_symlink(@main_path)
     end
 
-    def run
+    def run(commandline)
       _, @stdout_stderr, @thread = Open3.popen2e(
-        "texfot",
-        "pdflatex",
-        # "latexmk",
-        # "-pdf",
-        "--shell-escape", # TODO: remove me!
-        "--interaction=nonstopmode",
+        *commandline,
         @main_basename,
         chdir: tmp_dirname
       )
     end
 
-    def stream_poller(synced_signaler, delay: 0.05)
+    def stream_poller(synced_signaler, delay: 0.04)
       @stream_poller ||=
         Thread.new do
           loop do

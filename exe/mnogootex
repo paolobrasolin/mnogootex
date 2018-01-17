@@ -13,7 +13,7 @@ main, cfg = Mnogootex::CLI.recombobulate
 
 case ARGV[0].downcase
 when 'mnogoo'
-  puts Mnogootex.root.join('mnogoo.sh')
+  puts Mnogootex.root.join('cli', 'mnogoo.sh')
 when 'clobber'
   Mnogootex::CLI.clobber
 when 'cd'
