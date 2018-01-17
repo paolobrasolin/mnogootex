@@ -19,9 +19,17 @@ when 'clobber'
 when 'cd'
   raise "The 'cd' command can only be invoked through 'mnogoo'."
 when 'pdf'
-  # raise "PDF non esiste." unless File.exist? pdf
-  # `command -v open >/dev/null && open #{pdf} || xdg-open #{pdf}`
-  # exit
+  case ARGV.length
+  when 1
+    puts Dir.glob(main.dirname.join('*.pdf')).first
+    exit
+  when 2, 3
+    job = Mnogootex::Job.new cls: ARGV[1], target: main
+    puts Dir.glob(job.tmp_dirname.join('*.pdf')).first
+    exit
+  else
+    raise 'Malformed options.'
+  end
 when 'path'
   case ARGV.length
   when 1
@@ -34,8 +42,7 @@ when 'path'
     puts job.tmp_dirname
     exit
   else
-    puts ARGV.inspect
-    raise 'Malformed.'
+    raise 'Malformed options.'
   end
 when 'run'
   Mnogootex::Runner.new(source: main, configuration: cfg).start
