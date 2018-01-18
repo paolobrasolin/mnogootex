@@ -10,12 +10,12 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.authors       = ['Paolo Brasolin']
   spec.email         = ['paolo.brasolin@gmail.com']
 
-  spec.summary       = <<~SUMMARY
+  spec.summary       = <<~SUMMARY.tr("\n", ' ').squeeze(' ').strip
     Mnogootex (многоꙮтех) is a device to handle the compilation of
     TeX sources with different preambles at one time.
   SUMMARY
 
-  spec.description = <<~DESCRIPTION
+  spec.description = <<~DESCRIPTION.tr("\n", ' ').squeeze(' ').strip
     Mnogootex (многоꙮтех) is a device to handle the compilation of
     TeX sources with different preambles at one time. This avoids
     wasting time when you have to submit a paper to journals using
@@ -26,7 +26,7 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features|mwe|mnogootex_classes)/})
+    f.match(%r{^(test|spec|features|mwe)/})
   end
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
