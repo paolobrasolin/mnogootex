@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest'
 require 'tmpdir'
 require 'pathname'
@@ -13,7 +15,7 @@ module Mnogootex
       @main_path = File.expand_path target
       @main_basename = File.basename @main_path
       @main_dirname = File.dirname @main_path
-      raise "File non esiste." unless File.exist? @main_path
+      raise 'File non esiste.' unless File.exist? @main_path
 
       @cls = cls
       @log = []
@@ -24,7 +26,7 @@ module Mnogootex
     end
 
     def success?
-      @thread.value.exitstatus == 0
+      @thread.value.exitstatus.zero?
     end
 
     def tmp_dirname
@@ -41,10 +43,12 @@ module Mnogootex
       @path = File.join tmp_dirname, @main_basename
 
       code = File.read @path
-      replace = code.sub /\\documentclass(\[.*?\])?{.*?}/,
-                         "\\documentclass{#{@cls}}"
+      replace = code.sub(
+        /\\documentclass(\[.*?\])?{.*?}/,
+        "\\documentclass{#{@cls}}"
+      )
 
-      File.open @path, "w" do |file|
+      File.open @path, 'w' do |file|
         file.puts replace
       end
 

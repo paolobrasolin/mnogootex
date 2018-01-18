@@ -1,4 +1,4 @@
-# coding: utf-8
+# frozen_string_literal: true
 
 require 'yaml'
 
@@ -6,7 +6,7 @@ module Mnogootex
   class Configuration < Hash
     DEFAULT = YAML.load_file Pathname.new(__dir__).join('configuration', 'default.yml')
 
-    CFG_FILENAME = '.mnogootex.yml'.freeze
+    CFG_FILENAME = '.mnogootex.yml'
 
     def initialize
       @paths = []
@@ -29,16 +29,16 @@ module Mnogootex
     end
 
     def filter_cfg
-      @paths.
-        select!(&:readable?).
-        reject!(&:zero?)
+      @paths
+        .select!(&:readable?)
+        .reject!(&:zero?)
     end
 
     def load_cfg
-      @paths.
-        reverse.
-        map { |pathname| YAML.load_file pathname }.
-        inject(&:merge!) # TODO: deep merge
+      @paths
+        .reverse
+        .map { |pathname| YAML.load_file pathname }
+        .inject(&:merge!) # TODO: deep merge
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'thor'
 require 'pathname'
 
@@ -8,7 +10,7 @@ module Mnogootex
     desc 'mnogoo',
          'Print path of the shell wrapper script mnogoo'
     def mnogoo
-      puts Mnogootex.root.join('cli', 'mnogoo.sh')
+      puts Pathname.new(__dir__).join('cli', 'mnogoo.sh')
     end
 
     desc 'clobber',
@@ -24,7 +26,7 @@ module Mnogootex
     desc 'go [JOBS ...] [MAIN]',
          'Run compilation JOBS for MAIN document'
     def go(*args)
-      jobs, main = parse_jobs_main(*args)
+      _, main = parse_jobs_main(*args)
       main, opts = recombobulate(main)
       Mnogootex::Runner.new(source: main, configuration: opts).start
     end
@@ -33,7 +35,7 @@ module Mnogootex
          'Print target dirs relative to JOBS for MAIN document'
     def dir(*args)
       jobs, main = parse_jobs_main(*args)
-      main, opts = recombobulate(main)
+      main, = recombobulate(main)
 
       if jobs.empty?
         puts main.dirname
@@ -48,7 +50,7 @@ module Mnogootex
          'Print pdf paths relative to JOBS for MAIN document'
     def pdf(*args)
       jobs, main = parse_jobs_main(*args)
-      main, opts = recombobulate(main)
+      main, = recombobulate(main)
 
       if jobs.empty?
         puts Dir.glob(main.dirname.join('*.pdf')).first

@@ -1,4 +1,4 @@
-# coding: utf-8
+# frozen_string_literal: true
 
 module Mnogootex
   class Runner
@@ -45,11 +45,11 @@ module Mnogootex
       puts 'Details:'
       @jobs.each do |job|
         if job.success?
-          puts '  ' + "✔".green + ' ' + File.basename(job.cls)
+          puts '  ' + '✔'.green + ' ' + File.basename(job.cls)
         else
-          puts '  ' + "✘".red + ' ' + File.basename(job.cls)
+          puts '  ' + '✘'.red + ' ' + File.basename(job.cls)
           # puts job.log[2..-2].join.gsub(/^/,' '*6).chomp.red
-          puts filter.apply(job.log).gsub(/^/,' '*4).chomp
+          puts filter.apply(job.log).gsub(/^/, ' ' * 4).chomp
         end
       end
     end
@@ -67,11 +67,11 @@ module Mnogootex
       print 'Jobs: ' + icons.join + "\r"
     end
 
-  private
+    private
 
     def stata_drawer
       @state_logger ||= Thread.new do
-        synced_while ->() { @jobs.map(&:streaming).any? } do
+        synced_while -> { @jobs.map(&:streaming).any? } do
           redraw_status
         end
       end
