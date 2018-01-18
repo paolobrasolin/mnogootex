@@ -32,11 +32,11 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.16'
-  spec.add_development_dependency 'rake', '~> 10.0'
-  spec.add_development_dependency 'rspec', '~> 3.0'
+  spec.add_development_dependency 'bundler', '~> 1.16.1'
+  spec.add_development_dependency 'rake', '~> 10.4.2'
+  spec.add_development_dependency 'rspec', '~> 3.6.0'
   spec.add_development_dependency 'rubocop', '~> 0.52.1'
 
-  spec.add_dependency 'colorize'
-  spec.add_dependency 'thor'
+  spec.add_dependency 'colorize', '~> 0.8.1'
+  spec.add_dependency 'thor', '~> 0.20.0'
 end
