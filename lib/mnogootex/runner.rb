@@ -41,6 +41,7 @@ module Mnogootex
     end
 
     def print_details
+      filter = Filter.new configuration['filters']
       puts '  Details:'
       @jobs.each do |job|
         if job.success?
@@ -48,7 +49,7 @@ module Mnogootex
         else
           puts '    ' + "✘".red + ' ' + File.basename(job.cls)
           # puts job.log[2..-2].join.gsub(/^/,' '*6).chomp.red
-          puts job.log.join.gsub(/^/,' '*6).chomp.red
+          puts filter.apply(job.log).gsub(/^/,' '*6).chomp
         end
       end
     end

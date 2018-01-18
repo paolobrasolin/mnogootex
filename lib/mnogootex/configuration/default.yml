@@ -18,27 +18,32 @@ filters:
     - !ruby/regexp '/libpng warning: iCCP: Not recognizing/'
     - !ruby/regexp '/! $/'
   show:
-    - !ruby/regexp '/This is/'
-    - !ruby/regexp '/Output written/'
-    - !ruby/regexp '/No pages of output/'
     - !ruby/regexp '/\(.*end occurred inside a group/'
-    - !ruby/regexp '/(Und|Ov)erfull/'
-    - !ruby/regexp '/(LaTeX|Package|Class).*(Error|Warning)/'
-    - !ruby/regexp '/.*Citation.*undefined/'
-    - !ruby/regexp '/.* Error/' # as in \Url Error ->...
-    - !ruby/regexp '/Missing character:/' # good to show (need \tracinglostchars=1)
     - !ruby/regexp '/\\endL.*problem/' # XeTeX?
     - !ruby/regexp '/\*\*\*\s/' # *** from some packages or subprograms
-    - !ruby/regexp '/l\.[0-9]+/' # line number marking
     - !ruby/regexp '/all text was ignored after line/'
     - !ruby/regexp '/.*Fatal error/'
     - !ruby/regexp '/.*for symbol.*on input line/'
     - !ruby/regexp '/^.*?:[0-9]+:/' # usual file:lineno: form
-  next:
-    - !ruby/regexp '/^!/' # usual ! form
-    - !ruby/regexp '/^> [^<]/' # from \show..., but not "> <img.whatever"
-    - !ruby/regexp '/^.*pdfTeX warning/' # pdftex complaints often cross lines
-    - !ruby/regexp '/^LaTeX Font Warning: Font shape/'
-    - !ruby/regexp '/^Package hyperref Warning: Token not allowed/'
-    - !ruby/regexp '/^removed on input line/' # hyperref
-    - !ruby/regexp '/^Runaway argument/'
+
+  info:
+    - !ruby/regexp '/This is/'
+    - !ruby/regexp '/Output written/'
+    - !ruby/regexp '/No pages of output/'
+  warning:
+    - !ruby/regexp '/l\.[0-9]+/' # line number marking
+    - !ruby/regexp '/(LaTeX|Package|Class).*Warning/'
+    - !ruby/regexp '/(Und|Ov)erfull/'
+    - !ruby/regexp '/.*Citation.*undefined/'
+    - !ruby/regexp '/Missing character:/' # good to show (need \tracinglostchars=1)
+  error:
+    - !ruby/regexp '/.* Error/' # as in \Url Error ->...
+    - !ruby/regexp '/(LaTeX|Package|Class).*Error/'
+  # next:
+  #   - !ruby/regexp '/^!/' # usual ! form
+  #   - !ruby/regexp '/^> [^<]/' # from \show..., but not "> <img.whatever"
+  #   - !ruby/regexp '/^.*pdfTeX warning/' # pdftex complaints often cross lines
+  #   - !ruby/regexp '/^LaTeX Font Warning: Font shape/'
+  #   - !ruby/regexp '/^Package hyperref Warning: Token not allowed/'
+  #   - !ruby/regexp '/^removed on input line/' # hyperref
+  #   - !ruby/regexp '/^Runaway argument/'
