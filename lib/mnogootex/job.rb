@@ -2,6 +2,8 @@ require 'digest'
 require 'tmpdir'
 require 'pathname'
 require 'base64'
+require 'open3'
+require 'colorize'
 
 module Mnogootex
   class Job

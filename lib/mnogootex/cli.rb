@@ -1,10 +1,75 @@
+require 'thor'
 require 'pathname'
 
 module Mnogootex
-  module CLI
-    def self.recombobulate
+  class CLI < Thor
+    # class_option :verbose, type: :boolean
+
+    desc 'mnogoo',
+         'Print path of the shell wrapper script mnogoo'
+    def mnogoo
+      puts Mnogootex.root.join('cli', 'mnogoo.sh')
+    end
+
+    desc 'clobber',
+         'Clean up all temporary files'
+    def clobber
+      tmp_dir = Pathname.new(Dir.tmpdir).join('mnogootex')
+      tmp_dir_size = humanize_bytes dir_size(tmp_dir)
+      print "Freeing up #{tmp_dir_size}... "
+      FileUtils.rm_r tmp_dir, secure: true if tmp_dir.directory?
+      puts 'Done.'
+    end
+
+    desc 'go [JOBS ...] [MAIN]',
+         'Run compilation JOBS for MAIN document'
+    def go(*args)
+      jobs, main = parse_jobs_main(*args)
+      main, opts = recombobulate(main)
+      Mnogootex::Runner.new(source: main, configuration: opts).start
+    end
+
+    desc 'dir [JOBS ...] [MAIN]',
+         'Print target dirs relative to JOBS for MAIN document'
+    def dir(*args)
+      jobs, main = parse_jobs_main(*args)
+      main, opts = recombobulate(main)
+
+      if jobs.empty?
+        puts main.dirname
+      else
+        jobs.map! { |job| Mnogootex::Job.new cls: job, target: main }
+        jobs.map!(&:tmp_dirname)
+        puts jobs
+      end
+    end
+
+    desc 'pdf [JOBS ...] [MAIN]',
+         'Print pdf paths relative to JOBS for MAIN document'
+    def pdf(*args)
+      jobs, main = parse_jobs_main(*args)
+      main, opts = recombobulate(main)
+
+      if jobs.empty?
+        puts Dir.glob(main.dirname.join('*.pdf')).first
+      else
+        jobs.map! { |job| Mnogootex::Job.new cls: job, target: main }
+        jobs.map! { |job| Dir.glob(job.tmp_dirname.join('*.pdf')).first }
+        puts jobs
+      end
+    end
+
+    private
+
+    def parse_jobs_main(*args)
+      return [[], nil] if args.empty?
+      return [args[0..-2], args.last] if Pathname.new(args.last).file?
+      [args, nil]
+    end
+
+    def recombobulate(mainable)
       symlinked_main = Pathname.new('.mnogootex.main')
-      explicit_main = Pathname.new(ARGV.last)
+      explicit_main = Pathname.new(mainable.to_s)
       adjacent_cfg = Pathname.new('.mnogootex.yml')
 
       if symlinked_main.symlink? # then the pwd is the folder of a target
@@ -27,20 +92,12 @@ module Mnogootex
       [main, cfg]
     end
 
-    def self.clobber
-      dirmask = Pathname.new(Dir.tmpdir).join('mnogootex-*')
-      dirlist = Dir.glob(dirmask)
-      total_bytes = files_size(dirmask.join('**', '*'))
-      print "Deleting #{dirlist.length} folders to free #{human_bytes total_bytes}... "
-      FileUtils.rm_r dirlist, secure: true
-      puts 'Done.'
+    def dir_size(mask)
+      Dir.glob(Pathname.new(mask).join('**', '*'))
+         .map! { |f| Pathname.new(f).size }.inject(:+) || 0
     end
 
-    def self.files_size(mask)
-      Dir.glob(mask).map! { |f| Pathname.new(f).size }.inject(:+) || 0
-    end
-
-    def self.human_bytes(size)
+    def humanize_bytes(size)
       return "#{size}b"  if  size          < 1024
       return "#{size}Kb" if (size /= 1024) < 1024
       return "#{size}Mb" if (size /= 1024) < 1024

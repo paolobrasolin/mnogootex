@@ -1,51 +1,5 @@
 #!/usr/bin/env ruby
-# coding: utf-8
 
 require 'mnogootex'
-require 'tmpdir'
-require 'fileutils'
-require 'open3'
-require 'colorize'
 
-raise "No parameters given." if ARGV.length.zero?
-
-main, cfg = Mnogootex::CLI.recombobulate
-
-case ARGV[0].downcase
-when 'mnogoo'
-  puts Mnogootex.root.join('cli', 'mnogoo.sh')
-when 'clobber'
-  Mnogootex::CLI.clobber
-when 'cd'
-  raise "The 'cd' command can only be invoked through 'mnogoo'."
-when 'pdf'
-  case ARGV.length
-  when 1
-    puts Dir.glob(main.dirname.join('*.pdf')).first
-    exit
-  when 2, 3
-    job = Mnogootex::Job.new cls: ARGV[1], target: main
-    puts Dir.glob(job.tmp_dirname.join('*.pdf')).first
-    exit
-  else
-    raise 'Malformed options.'
-  end
-when 'path'
-  case ARGV.length
-  when 1
-    # get source path
-    puts main.dirname
-    exit
-  when 2, 3
-    job = Mnogootex::Job.new cls: ARGV[1], target: main
-    # TODO: check that it was configured and built
-    puts job.tmp_dirname
-    exit
-  else
-    raise 'Malformed options.'
-  end
-when 'run'
-  Mnogootex::Runner.new(source: main, configuration: cfg).start
-else
-  raise 'unknown command'
-end
+Mnogootex::CLI.start ARGV
