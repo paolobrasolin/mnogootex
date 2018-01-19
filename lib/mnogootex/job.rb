@@ -33,6 +33,10 @@ module Mnogootex
       @tmp_dirname ||= Pathname.new(Dir.tmpdir).join('mnogootex', @source_id, @cls)
     end
 
+    def pdf_pathname
+      @pdf_pathname ||= Pathname.new Dir.glob(tmp_dirname.join('*.pdf')).first
+    end
+
     def setup
       FileUtils.rm_r tmp_dirname, secure: true if tmp_dirname.directory?
       FileUtils.mkdir_p tmp_dirname

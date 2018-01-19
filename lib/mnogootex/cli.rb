@@ -26,16 +26,14 @@ module Mnogootex
     desc 'go [JOBS ...] [MAIN]',
          'Run compilation JOBS for MAIN document'
     def go(*args)
-      _, main = parse_jobs_main(*args)
-      main, opts = recombobulate(main)
+      _, main, opts = recombobulate(*args)
       Mnogootex::Runner.new(source: main, configuration: opts).start
     end
 
     desc 'dir [JOBS ...] [MAIN]',
          'Print target dirs relative to JOBS for MAIN document'
     def dir(*args)
-      jobs, main = parse_jobs_main(*args)
-      main, = recombobulate(main)
+      jobs, main, = recombobulate(*args)
 
       if jobs.empty?
         puts main.dirname
@@ -49,14 +47,13 @@ module Mnogootex
     desc 'pdf [JOBS ...] [MAIN]',
          'Print pdf paths relative to JOBS for MAIN document'
     def pdf(*args)
-      jobs, main = parse_jobs_main(*args)
-      main, = recombobulate(main)
+      jobs, main, = recombobulate(*args)
 
       if jobs.empty?
         puts Dir.glob(main.dirname.join('*.pdf')).first
       else
         jobs.map! { |job| Mnogootex::Job.new cls: job, target: main }
-        jobs.map! { |job| Dir.glob(job.tmp_dirname.join('*.pdf')).first }
+        jobs.map!(&:pdf_pathname)
         puts jobs
       end
     end
@@ -69,29 +66,31 @@ module Mnogootex
       [args, nil]
     end
 
-    def recombobulate(mainable)
-      symlinked_main = Pathname.new('.mnogootex.main')
-      explicit_main = Pathname.new(mainable.to_s)
-      adjacent_cfg = Pathname.new('.mnogootex.yml')
+    def recombobulate(*args)
+      jobs, mainable = parse_jobs_main(*args)
+      cfg = Mnogootex::Configuration.new
 
-      if symlinked_main.symlink? # then the pwd is the folder of a target
-        main = symlinked_main.readlink.realpath
-        cfg = Mnogootex::Configuration.new
+      if !mainable.nil? && (main = Pathname.new(mainable)).file?
+        main = main.realpath
         cfg.load main.dirname
-      elsif explicit_main.file? # then the pwd is irrelevant
-        main = explicit_main.realpath
-        cfg = Mnogootex::Configuration.new
+      elsif (main = Pathname.new('.mnogootex.main')).symlink?
+        main = main.readlink.realpath
         cfg.load main.dirname
-      elsif adjacent_cfg.file? # then the pwd is the folder of a source
-        cfg = Mnogootex::Configuration.new
-        cfg.load adjacent_cfg.realpath.dirname
-        # and we expect the main to be configured and existing
-        raise 'Configuration does not include main file.' if cfg['main'].nil?
-        main = Pathname.new cfg['main']
-        raise 'Configured main file does not exist.' unless main.file?
+      else
+        cfg.load Pathname.pwd
+        main = recombobulate_pwd cfg['main']
       end
 
-      [main, cfg]
+      [jobs, main, cfg]
+    end
+
+    def recombobulate_pwd(mainable)
+      raise DiscombobulatedError if mainable.nil?
+      main = Pathname.new(mainable)
+      raise DiscombobulatedError unless main.file?
+      main = main.realpath
+      raise DiscombobulatedError unless Pathname.pwd == main.dirname
+      main
     end
 
     def dir_size(mask)
