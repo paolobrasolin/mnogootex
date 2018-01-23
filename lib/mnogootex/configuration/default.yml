@@ -25,19 +25,18 @@ filters:
 
     #
     - !ruby/regexp '/! $/'
-  show:
-    - !ruby/regexp '/\(.*end occurred inside a group/'
-    - !ruby/regexp '/\\endL.*problem/' # XeTeX?
-    - !ruby/regexp '/\*\*\*\s/' # *** from some packages or subprograms
-    - !ruby/regexp '/all text was ignored after line/'
-    - !ruby/regexp '/.*Fatal error/'
-    - !ruby/regexp '/.*for symbol.*on input line/'
-    - !ruby/regexp '/^.*?:[0-9]+:/' # usual file:lineno: form
-
   info:
     - !ruby/regexp '/This is/'
     - !ruby/regexp '/Output written/'
     - !ruby/regexp '/No pages of output/'
+
+    # TODO: classify
+    - !ruby/regexp '/\(.*end occurred inside a group/'
+    - !ruby/regexp '/\\endL.*problem/' # XeTeX?
+    - !ruby/regexp '/\*\*\*\s/' # *** from some packages or subprograms
+    - !ruby/regexp '/all text was ignored after line/'
+    - !ruby/regexp '/.*for symbol.*on input line/'
+    - !ruby/regexp '/^.*?:[0-9]+:/' # usual file:lineno: form
   warning:
     - !ruby/regexp '/l\.[0-9]+/' # line number marking
     - !ruby/regexp '/(LaTeX|Package|Class).*Warning/'
@@ -45,6 +44,7 @@ filters:
     - !ruby/regexp '/.*Citation.*undefined/'
     - !ruby/regexp '/Missing character:/' # good to show (need \tracinglostchars=1)
   error:
+    - !ruby/regexp '/.*Fatal error/'
     - !ruby/regexp '/.* Error/' # as in \Url Error ->...
     - !ruby/regexp '/(LaTeX|Package|Class).*Error/'
   # next:
