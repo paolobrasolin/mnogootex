@@ -1,86 +1,89 @@
 # frozen_string_literal: true
 
-require 'digest'
-require 'tmpdir'
 require 'pathname'
+require 'digest'
 require 'base64'
+require 'tmpdir'
 require 'open3'
-require 'colorize'
 
 module Mnogootex
   class Job
-    attr_reader :thread, :stdout_stderr, :log, :ticks, :cls, :streaming
+    attr_reader :thread, :log, :ticks, :streaming, :cls
 
     def initialize(cls:, target:)
-      @main_path = File.expand_path target
-      @main_basename = File.basename @main_path
-      @main_dirname = File.dirname @main_path
-      raise 'File non esiste.' unless File.exist? @main_path
+      @source_path = Pathname.new(target).realpath
 
       @cls = cls
       @log = []
       @ticks = 0
       @streaming = true
-
-      @source_id = Base64.urlsafe_encode64 Digest::MD5.digest(@main_path)
     end
 
     def success?
       @thread.value.exitstatus.zero?
     end
 
-    def tmp_dirname
-      @tmp_dirname ||= Pathname.new(Dir.tmpdir).join('mnogootex', @source_id, @cls)
+    def source_id
+      @source_id ||= Base64.urlsafe_encode64 Digest::MD5.digest(@source_path.to_s)
     end
 
-    def pdf_pathname
-      @pdf_pathname ||= Pathname.new Dir.glob(tmp_dirname.join('*.pdf')).first
+    def tmp_dir
+      @tmp_dir ||= Pathname.new(Dir.tmpdir).join('mnogootex', source_id, @cls)
+    end
+
+    def pdf_path
+      # TODO: there ought to be a smarter way to do this
+      @pdf_path ||= Pathname.new Dir.glob(tmp_dir.join('*.pdf')).first
     end
 
     def setup
-      FileUtils.rm_r tmp_dirname, secure: true if tmp_dirname.directory?
-      FileUtils.mkdir_p tmp_dirname
-
-      # TODO: cleanup target folder
-      FileUtils.cp_r File.join(@main_dirname, '.'), tmp_dirname
-
-      @path = File.join tmp_dirname, @main_basename
-
-      code = File.read @path
-      replace = code.sub(
-        /\\documentclass(\[.*?\])?{.*?}/,
-        "\\documentclass{#{@cls}}"
-      )
-
-      File.open @path, 'w' do |file|
-        file.puts replace
-      end
-
-      FileUtils.rm tmp_dirname.join('.mnogootex.yml')
-      tmp_dirname.join('.mnogootex.main').make_symlink(@main_path)
+      setup_target_files
+      setup_target_code
     end
 
-    def run(commandline)
+    def start(commandline)
+      # NOTE: while we ought to be distinguishing out and err, the engines
+      #   uses them pretty inconsistently so it's not worth the effort atm.
       _, @stdout_stderr, @thread = Open3.popen2e(
         *commandline,
-        @main_basename,
-        chdir: tmp_dirname
+        @source_path.basename.to_s,
+        chdir: tmp_dir
       )
     end
 
-    def stream_poller(synced_signaler, delay: 0.04)
+    def stream_poller(state_change_signaler, delay: 0.04)
       @stream_poller ||=
         Thread.new do
           loop do
             line = @stdout_stderr.gets
             break unless !line.nil? || @thread.alive?
             @ticks += 1
-            synced_signaler.call
+            state_change_signaler.call
             @log << line
             sleep delay if @thread.alive?
           end
-          synced_signaler.call { @streaming = false }
+          state_change_signaler.call { @streaming = false }
         end
+    end
+
+    private
+
+    def setup_target_files
+      tmp_dir.rmtree if tmp_dir.directory?
+      tmp_dir.mkpath
+      FileUtils.cp_r File.join(@source_path.dirname, '.'), tmp_dir
+      tmp_dir.join('.mnogootex.yml').tap { |p| p.delete if p.file? }
+      tmp_dir.join('.mnogootex.src').make_symlink(@source_path)
+    end
+
+    def setup_target_code
+      target_path = tmp_dir.join(@source_path.basename)
+      code = target_path.read
+      replace = code.sub(
+        /\\documentclass(\[.*?\])?{.*?}/,
+        "\\documentclass{#{@cls}}"
+      )
+      target_path.write(replace)
     end
   end
 end

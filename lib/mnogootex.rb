@@ -7,7 +7,5 @@ require 'mnogootex/cli'
 require 'mnogootex/runner'
 require 'mnogootex/filter'
 
-require 'pathname'
-
 module Mnogootex
 end

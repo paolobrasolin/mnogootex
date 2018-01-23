@@ -3,6 +3,7 @@ commandline:
   - latexmk
   - -pdf
   - --interaction=nonstopmode
+  - --shell-escape
 filters:
   ignore:
     - !ruby/regexp '/LaTeX Warning: You have requested package/'

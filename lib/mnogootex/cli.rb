@@ -39,7 +39,7 @@ module Mnogootex
         puts main.dirname
       else
         jobs.map! { |job| Mnogootex::Job.new cls: job, target: main }
-        jobs.map!(&:tmp_dirname)
+        jobs.map!(&:tmp_dir)
         puts jobs
       end
     end
@@ -53,7 +53,7 @@ module Mnogootex
         puts Dir.glob(main.dirname.join('*.pdf')).first
       else
         jobs.map! { |job| Mnogootex::Job.new cls: job, target: main }
-        jobs.map!(&:pdf_pathname)
+        jobs.map!(&:pdf_path)
         puts jobs
       end
     end
@@ -73,7 +73,7 @@ module Mnogootex
       if !mainable.nil? && (main = Pathname.new(mainable)).file?
         main = main.realpath
         cfg.load main.dirname
-      elsif (main = Pathname.new('.mnogootex.main')).symlink?
+      elsif (main = Pathname.new('.mnogootex.src')).symlink?
         main = main.readlink.realpath
         cfg.load main.dirname
       else

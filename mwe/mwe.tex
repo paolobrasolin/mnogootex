@@ -1,24 +1,11 @@
 \documentclass{article}
 
+
 \begin{document}
 
-%% \immediate\write18{sleep 1}
-%% \immediate\write18{echo lol}
-%% \immediate\write18{sleep 1}
-%% \immediate\write18{echo lol}
-%% \immediate\write18{sleep 1}
-%% \immediate\write18{echo lol}
-%% \immediate\write18{sleep 1}
-%% \immediate\write18{echo lol}
-%% \immediate\write18{sleep 1}
-%% \immediate\write18{echo lol}
-%% \immediate\write18{sleep 1}
-%% \immediate\write18{echo lol}
-%% \immediate\write18{sleep 1}
-%% \immediate\write18{echo lol}
+\catcode`\% = 11
+\immediate\write18{number=$((RANDOM % 100)); for ((run=1; run <= number; run++)); do echo tick; sleep 0.01; done}
 
 Hero Warudo!
-
-\abstract{LEL}
 
 \end{document}

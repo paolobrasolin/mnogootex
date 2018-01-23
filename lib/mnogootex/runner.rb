@@ -1,17 +1,20 @@
 # frozen_string_literal: true
 
+require 'colorize'
+
 module Mnogootex
   class Runner
     attr_reader :source, :configuration
 
     def initialize(source:, configuration:)
-      @mutex = Mutex.new
-      @covar = ConditionVariable.new
+      @state_mutex = Mutex.new
+      @state_changed = ConditionVariable.new
 
       @source = source
       @configuration = configuration
 
-      @anim = configuration['animation'].freeze
+      @anim_frames = configuration['animation']
+      @anim_length = @anim_frames.length
 
       @jobs = []
       @threads = []
@@ -26,18 +29,33 @@ module Mnogootex
 
       @jobs.map(&:setup)
 
-      @threads << stata_drawer
+      @threads << state_logger
 
       @jobs.each do |job|
-        job.run(configuration['commandline'])
+        job.start(configuration['commandline'])
         @threads << job.thread
-        @threads << job.stream_poller(method(:synced_signaler))
+        @threads << job.stream_poller(method(:state_change_signaler))
       end
 
       @threads.map(&:join)
 
-      puts # terminate last line redraw by stata_drawer
+      puts # to terminate last line redraw by state_logger
       print_details
+    end
+
+    private
+
+    def redraw_status
+      icons = @jobs.map do |j|
+        icon = @anim_frames[j.ticks % @anim_length]
+        case j.thread.status
+        when 'sleep', 'run', 'aborting'
+          icon.yellow
+        when false, nil # exited (normally or w/error resp.)
+          j.success? ? icon.green : icon.red
+        end
+      end
+      print 'Jobs: ' + icons.join + "\r"
     end
 
     def print_details
@@ -54,42 +72,21 @@ module Mnogootex
       end
     end
 
-    def redraw_status
-      icons = @jobs.map do |j|
-        icon = @anim[j.ticks % @anim.length]
-        case j.thread.status
-        when 'sleep', 'run', 'aborting'
-          icon.yellow
-        when false, nil # exited (normally or w/ error)
-          j.success? ? icon.green : icon.red
-        end
-      end
-      print 'Jobs: ' + icons.join + "\r"
-    end
-
-    private
-
-    def stata_drawer
+    def state_logger
       @state_logger ||= Thread.new do
-        synced_while -> { @jobs.map(&:streaming).any? } do
-          redraw_status
+        @state_mutex.synchronize do
+          while @jobs.map(&:streaming).any?
+            @state_changed.wait @state_mutex
+            redraw_status
+          end
         end
       end
     end
 
-    def synced_signaler
-      @mutex.synchronize do
+    def state_change_signaler
+      @state_mutex.synchronize do
         yield if block_given?
-        @covar.signal
-      end
-    end
-
-    def synced_while(condition)
-      @mutex.synchronize do
-        while condition.call
-          @covar.wait(@mutex)
-          yield
-        end
+        @state_changed.signal
       end
     end
   end
