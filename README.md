@@ -20,15 +20,29 @@ To setup its shell integration `mnogoo` add this to your shell profile
 
     [ -s $(mnogootex mnogoo) ] && source $(mnogootex mnogoo)
 
-## Usage
+## Basic usage
 
-### Commands
+Set up your `LaTeX` project as usual.
+We'll assume its main file setting the `\documentclass` is `~/project_folder/main_file.tex`.
 
-> TODO
+In the root of your project, create a configuration file `.mnogootex.yml`
+which lists the document classes you want to compile your project with:
 
-### Configuration
+    jobs:
+      - book
+      - article
+      - scrartcl
+      - scrbook
+      
+Run `mnogootex`:
 
-> TODO
+    $ mnogootex go ~/project_folder/main_file.tex
+    Jobs: ⣾⣯⣷⣟
+    Details:
+      ✔ book
+      ✔ article
+      ✔ scrartcl
+      ✔ scrbook
 
 ## Development
 
