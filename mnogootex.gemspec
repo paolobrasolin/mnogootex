@@ -11,15 +11,18 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.email         = ['paolo.brasolin@gmail.com']
 
   spec.summary       = <<~SUMMARY.tr("\n", ' ').squeeze(' ').strip
-    Mnogootex (многоꙮтех) is a device to handle the compilation of
-    TeX sources with different preambles at one time.
+    Многоꙮтех (mnogootex) is a utility that parallelizes compilation
+    of a LaTeX document using different classes and offers a
+    meaningfully filtered output.
   SUMMARY
 
   spec.description = <<~DESCRIPTION.tr("\n", ' ').squeeze(' ').strip
-    Mnogootex (многоꙮтех) is a device to handle the compilation of
-    TeX sources with different preambles at one time. This avoids
-    wasting time when you have to submit a paper to journals using
-    outdated or crummy document classes.
+    Многоꙮтех (mnogootex) is a utility that parallelizes compilation
+    of a LaTeX document using different classes and offers a
+    meaningfully filtered output.
+    The motivating use case is maintaining a single preamble while
+    submitting a paper to many journals using their outdated or crummy
+    document classes.
   DESCRIPTION
 
   spec.homepage      = 'https://github.com/tetrapharmakon/mnogootex'

@@ -1,24 +1,24 @@
 # Многоꙮтех
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/mnogootex`. To experiment with that code, run `bin/console` for an interactive prompt.
+Многоꙮтех (mnogootex) is a utility that parallelizes compilation
+of a LaTeX document using different classes and offers a
+meaningfully filtered output.
 
-TODO: Delete this and the text above, and describe your gem
+The motivating use case is maintaining a single preamble while
+submitting a paper to many journals using their outdated or crummy
+document classes.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+The only requirement is [Ruby](https://www.ruby-lang.org).
 
-```ruby
-gem 'mnogootex'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+To install многоꙮтех execute
 
     $ gem install mnogootex
+    
+To setup its shell integration `mnogoo` add this to your shell profile
+
+    [ -s $(mnogootex mnogoo) ] && source $(mnogootex mnogoo)
 
 ## Usage
 
