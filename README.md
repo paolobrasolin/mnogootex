@@ -22,7 +22,13 @@ To setup its shell integration `mnogoo` add this to your shell profile
 
 ## Usage
 
-TODO: Write usage instructions here
+### Commands
+
+> TODO
+
+### Configuration
+
+> TODO
 
 ## Development
 
@@ -40,4 +46,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Mnogootex project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/mnogootex/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the многоꙮтех project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/mnogootex/blob/master/CODE_OF_CONDUCT.md).
