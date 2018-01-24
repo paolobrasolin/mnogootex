@@ -25,8 +25,8 @@ To setup its shell integration `mnogoo` add this to your shell profile
 Set up your `LaTeX` project as usual.
 We'll assume its main file setting the `\documentclass` is `~/project_folder/main_file.tex`.
 
-In the root of your project, create a configuration file `.mnogootex.yml`
-which lists the document classes you want to compile your project with:
+Create a configuration file `~/project_folder/.mnogootex.yml`
+listing the document classes you want to compile your project with:
 
     jobs:
       - book
