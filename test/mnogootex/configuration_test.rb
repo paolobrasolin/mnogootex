@@ -4,8 +4,8 @@ require 'yaml'
 
 require 'mnogootex/configuration'
 
-module MnogootexTest
-  class Configuration < Minitest::Test
+module TestMnogootex
+  class ConfigurationTest < Minitest::Test
     def setup
       @tmp_dir = Pathname.new(Dir.tmpdir).join('mnogootex-test')
       @tmp_dir.join('A', 'B').mkpath
