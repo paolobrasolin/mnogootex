@@ -68,7 +68,8 @@ module Mnogootex
 
     def recombobulate(*args)
       jobs, mainable = parse_jobs_main(*args)
-      cfg = Mnogootex::Configuration.new
+      cfg = Mnogootex::Configuration.new basename: Mnogootex::CFG_BASENAME,
+                                         defaults: Mnogootex::CFG_DEFAULTS
 
       if !mainable.nil? && (main = Pathname.new(mainable)).file?
         main = main.realpath

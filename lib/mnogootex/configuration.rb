@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'pathname'
 
 module Mnogootex
+  CFG_DEFAULTS = YAML.load_file Pathname.new(__dir__).join('configuration', 'default.yml')
+  CFG_BASENAME = '.mnogootex.yml'
+
   class Configuration < Hash
-    DEFAULT = YAML.load_file Pathname.new(__dir__).join('configuration', 'default.yml')
-
-    CFG_FILENAME = '.mnogootex.yml'
-
-    def initialize(basename: CFG_FILENAME, defaults: DEFAULT)
+    def initialize(basename:, defaults: {})
       @paths = []
       @basename = basename
       @defaults = defaults
