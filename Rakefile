@@ -5,9 +5,7 @@
 require 'rake/testtask'
 
 Rake::TestTask.new do |t|
-  t.name = 'spec'
-  t.description = 'Run specs'
-  t.pattern = 'spec/**/*_spec.rb'
+  t.pattern = 'test/**/*_test.rb'
 end
 
 # task default: :spec

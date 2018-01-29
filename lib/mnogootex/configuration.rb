@@ -8,9 +8,11 @@ module Mnogootex
 
     CFG_FILENAME = '.mnogootex.yml'
 
-    def initialize
+    def initialize(basename: CFG_FILENAME, defaults: DEFAULT)
       @paths = []
-      merge! DEFAULT
+      @basename = basename
+      @defaults = defaults
+      merge! @defaults
     end
 
     def load(pathname = Pathname.pwd)
@@ -23,7 +25,7 @@ module Mnogootex
     private
 
     def scan_cfg(pathname)
-      @paths << pathname.join(CFG_FILENAME)
+      @paths << pathname.join(@basename)
       return if pathname.root?
       scan_cfg pathname.parent
     end
