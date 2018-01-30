@@ -4,3 +4,5 @@ Metrics/LineLength:
   Max: 120
 Style/Documentation:
   Enabled: false
+Layout/DotPosition:
+  EnforcedStyle: trailing

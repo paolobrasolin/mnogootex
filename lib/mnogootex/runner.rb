@@ -59,17 +59,37 @@ module Mnogootex
     end
 
     def print_details
-      filter = Filter.new configuration['filters']
+      tagger = Log::Tagger.new configuration['matchers']
       puts 'Details:'
       @jobs.each do |job|
         if job.success?
           puts '  ' + '✔'.green + ' ' + File.basename(job.cls)
         else
           puts '  ' + '✘'.red + ' ' + File.basename(job.cls)
-          # puts job.log[2..-2].join.gsub(/^/,' '*6).chomp.red
-          puts filter.apply(job.log).gsub(/^/, ' ' * 4).chomp
+          puts render_tagged_log tagger.parse(job.log)
         end
       end
+    end
+
+    COLOURS = {
+      trace: :white,
+      info: :light_white,
+      warning: :light_yellow,
+      error: :light_red,
+    }
+
+    LEVELS = {
+      trace: 0,
+      info: 1,
+      warning: 2,
+      error: 3,
+    }
+
+    def render_tagged_log(tagged_log)
+      tagged_log.
+        select { |line| LEVELS[line.tag] >= LEVELS[:info] }.
+        each { |line| line.text = line.text.send(COLOURS[line.tag]) }.
+        map(&:text).join("\n").gsub(/^/, ' ' * 4).chomp
     end
 
     def state_logger

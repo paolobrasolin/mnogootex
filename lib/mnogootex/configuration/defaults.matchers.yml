@@ -1,0 +1,98 @@
+- regexp: !ruby/regexp '/LaTeX Warning: You have requested package/'
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/LaTeX Font Warning: Some font shapes/'
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/LaTeX Font Warning: Size substitutions/'
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/Package caption Warning: Unsupported document class/'
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/Package fixltx2e Warning: fixltx2e is not required/'
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/Package frenchb?\.ldf Warning: (Figures|The definition)/'
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/\*\*\* Reloading Xunicode for encoding/' # spurious ***
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/This is `?(epsf\.tex|.*\.sty|TAP)/' # so what
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/pdfTeX warning:.*inclusion: fou/'
+  loglvl: !ruby/symbol trace
+  sample: |
+    pdfTeX warning: pdflatex.exe (file ./fig.pdf): PDF inclusion: found PDF version <1.6>, but at most version <1.5> allowed
+- regexp: !ruby/regexp '/pdfTeX warning:.*inclusion: mul/'
+  loglvl: !ruby/symbol trace
+  sample: |
+    pdfTeX warning: pdflatex (file ./doc.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+- regexp: !ruby/regexp '/libpng warning: iCCP: Not recognizing/'
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/! $/'
+  loglvl: !ruby/symbol trace
+- regexp: !ruby/regexp '/This is/'
+  loglvl: !ruby/symbol info
+- regexp: !ruby/regexp '/Output written/'
+  loglvl: !ruby/symbol info
+- regexp: !ruby/regexp '/No pages of output/'
+  loglvl: !ruby/symbol info
+# TODO: classify
+- regexp: !ruby/regexp '/\(.*end occurred inside a group/'
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/\\endL.*problem/' # XeTeX?
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/\*\*\*\s/' # *** from some packages or subprograms
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/all text was ignored after line/'
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/.*for symbol.*on input line/'
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/^.*?:[0-9]+:/' # usual file:lineno: form
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/l\.[0-9]+/' # line number marking
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/(LaTeX|Package|Class).*Warning/'
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/(Und|Ov)erfull/'
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/.*Citation.*undefined/'
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/Missing character:/' # good to show (need \tracinglostchars=1)
+  loglvl: !ruby/symbol warning
+- regexp: !ruby/regexp '/.*Fatal error/'
+  loglvl: !ruby/symbol error
+- regexp: !ruby/regexp '/.* Error/' # as in \Url Error ->...
+  loglvl: !ruby/symbol error
+- regexp: !ruby/regexp '/(LaTeX|Package|Class).*Error/'
+  loglvl: !ruby/symbol error
+- regexp: !ruby/regexp '/^> [^<]/' # from \show..., but not "> <img.whatever"
+  loglvl: !ruby/symbol error
+  length: 2
+- regexp: !ruby/regexp '/^.*pdfTeX warning/' # pdftex complaints often cross lines
+  loglvl: !ruby/symbol error
+  length: 2
+- regexp: !ruby/regexp '/^LaTeX Font Warning: Font shape/'
+  loglvl: !ruby/symbol error
+  length: 2
+- regexp: !ruby/regexp '/^Package hyperref Warning: Token not allowed/'
+  loglvl: !ruby/symbol error
+  length: 2
+- regexp: !ruby/regexp '/^removed on input line/' # hyperref
+  loglvl: !ruby/symbol error
+  length: 2
+- regexp: !ruby/regexp '/^Runaway argument/'
+  loglvl: !ruby/symbol error
+  length: 2
+- regexp: !ruby/regexp "/^! Undefined control sequence./"
+  loglvl: !ruby/symbol error
+  length: 3
+- regexp: !ruby/regexp "/^! Too many }'s./"
+  loglvl: !ruby/symbol error
+  length: 3
+  sample: |
+    ! Too many }'s.
+    l.7 ...d foo bar baz qux zod foo bar baz qux zod }
+                                                        foo
+- regexp: !ruby/regexp '/^!/' # usual ! form
+  loglvl: !ruby/symbol error
+  length: 2
+- # NOTE: do not remove, this is a catch-all filter to mark untagged lines as :trace
+  regexp: !ruby/regexp '/.*/'
+  loglvl: !ruby/symbol trace
+  length: 1
