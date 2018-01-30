@@ -5,7 +5,6 @@ require 'mnogootex/configuration'
 require 'mnogootex/job'
 require 'mnogootex/cli'
 require 'mnogootex/runner'
-require 'mnogootex/log/tagger'
 
 module Mnogootex
 end

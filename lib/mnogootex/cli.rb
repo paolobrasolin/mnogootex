@@ -3,6 +3,8 @@
 require 'thor'
 require 'pathname'
 
+require 'mnogootex/constants'
+
 module Mnogootex
   class CLI < Thor
     # class_option :verbose, type: :boolean

@@ -2,6 +2,8 @@
 
 require 'colorize'
 
+require 'mnogootex/log/tagger'
+
 module Mnogootex
   class Runner
     attr_reader :source, :configuration

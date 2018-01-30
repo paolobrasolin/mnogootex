@@ -4,12 +4,6 @@ require 'yaml'
 require 'pathname'
 
 module Mnogootex
-  CFG_DEFAULTS =
-    YAML.load_file(Pathname.new(__dir__).join('configuration', 'defaults.yml')).merge!(
-      'matchers' => YAML.load_file(Pathname.new(__dir__).join('configuration', 'defaults.matchers.yml'))
-    )
-  CFG_BASENAME = '.mnogootex.yml'
-
   class Configuration < Hash
     def initialize(basename:, defaults: {})
       @paths = []
