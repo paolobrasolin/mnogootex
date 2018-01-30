@@ -34,16 +34,16 @@ module Mnogootex
     end
 
     def filter_cfg
-      @paths
-        .select!(&:readable?)
-        .reject!(&:zero?)
+      @paths.
+        select!(&:readable?).
+        reject!(&:zero?)
     end
 
     def load_cfg
-      @paths
-        .reverse
-        .map { |pathname| YAML.load_file pathname }
-        .inject(&:merge!) # TODO: deep merge
+      @paths.
+        reverse.
+        map { |pathname| YAML.load_file pathname }.
+        inject(&:merge!) # TODO: deep merge
     end
   end
 end

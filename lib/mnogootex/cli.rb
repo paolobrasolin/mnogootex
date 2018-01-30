@@ -95,8 +95,8 @@ module Mnogootex
     end
 
     def dir_size(mask)
-      Dir.glob(Pathname.new(mask).join('**', '*'))
-         .map! { |f| Pathname.new(f).size }.inject(:+) || 0
+      Dir.glob(Pathname.new(mask).join('**', '*')).
+        map! { |f| Pathname.new(f).size }.inject(:+) || 0
     end
 
     def humanize_bytes(size)
