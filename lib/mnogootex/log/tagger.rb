@@ -24,15 +24,15 @@ module Mnogootex
 
       def prepare_matchers
         @matchers.map! do |matcher|
-          Matcher.new regexp: matcher['regexp'],
-                      tag: matcher['loglvl'],
-                      length: matcher['length']
+          Matcher.new matcher.fetch('regexp'),
+                      matcher.fetch('loglvl', 'trace'),
+                      matcher.fetch('length', 1)
         end
       end
 
       def prepare_lines!
         @lines.map! do |line|
-          Line.new text: line.chomp
+          Line.new nil, line.chomp
         end
       end
 
@@ -46,7 +46,7 @@ module Mnogootex
           else # still on the tail of the previous match
             tail_length -= 1
           end
-          line.tag = matcher&.tag
+          line.loglvl = matcher&.loglvl
         end
       end
     end

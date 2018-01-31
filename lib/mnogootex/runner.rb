@@ -89,8 +89,8 @@ module Mnogootex
 
     def render_tagged_log(tagged_log)
       tagged_log.
-        select { |line| LEVELS[line.tag] >= LEVELS[:info] }.
-        each { |line| line.text = line.text.send(COLOURS[line.tag]) }.
+        select { |line| LEVELS[line.loglvl] >= LEVELS[:info] }.
+        each { |line| line.text = line.text.send(COLOURS[line.loglvl]) }.
         map(&:text).join("\n").gsub(/^/, ' ' * 4).chomp
     end
 

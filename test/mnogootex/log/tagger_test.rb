@@ -13,7 +13,7 @@ module MnogootexTest
         Mnogootex::Log::Tagger.
           new(YAML.safe_load(yaml, [Regexp, Symbol])).
           parse(text.lines).
-          map(&:tag)
+          map(&:loglvl)
       end
 
       def test_it_tags_simple_matches
