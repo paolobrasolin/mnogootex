@@ -13,13 +13,13 @@ module MnogootexTest
         Mnogootex::Log::Tagger.
           new(YAML.safe_load(yaml, [Regexp, Symbol])).
           parse(text.lines).
-          map(&:loglvl)
+          map(&:level)
       end
 
       def test_it_tags_simple_matches
         assert_equal %i[foo], parsed_tags(<<~YAML, <<~TEXT)
           - regexp: !ruby/regexp '/^foo/'
-            loglvl: !ruby/symbol foo
+            level: !ruby/symbol foo
         YAML
           foo
         TEXT
@@ -28,10 +28,10 @@ module MnogootexTest
       def test_it_does_not_rematch_tails
         assert_equal %i[long_bar long_bar], parsed_tags(<<~YAML, <<~TEXT)
           - regexp: !ruby/regexp '/bar/'
-            loglvl: !ruby/symbol long_bar
+            level: !ruby/symbol long_bar
             length: 2
           - regexp: !ruby/regexp '/bar/'
-            loglvl: !ruby/symbol short_bar
+            level: !ruby/symbol short_bar
             length: 1
         YAML
           bar
@@ -42,9 +42,9 @@ module MnogootexTest
       def test_it_applies_matchers_in_order
         assert_equal %i[fast_baz], parsed_tags(<<~YAML, <<~TEXT)
           - regexp: !ruby/regexp '/baz/'
-            loglvl: !ruby/symbol fast_baz
+            level: !ruby/symbol fast_baz
           - regexp: !ruby/regexp '/baz/'
-            loglvl: !ruby/symbol slow_baz
+            level: !ruby/symbol slow_baz
         YAML
           baz
         TEXT

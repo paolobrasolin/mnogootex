@@ -51,3 +51,6 @@ Gemfile.lock
 
 # rspec failure tracking
 .rspec_status
+
+# byebug history
+**/.byebug_history

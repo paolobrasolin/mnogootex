@@ -1,0 +1,18 @@
+- # NOTE: merely symbolic, not to be used in matchers
+  priority: -.inf
+  name: !ruby/symbol :all
+- priority: 0
+  name: !ruby/symbol trace
+  color: !ruby/symbol white
+- priority: 1
+  name: !ruby/symbol info
+  color: !ruby/symbol light_white
+- priority: 2
+  name: !ruby/symbol warning
+  color: !ruby/symbol light_yellow
+- priority: 3
+  name: !ruby/symbol error
+  color: !ruby/symbol light_red
+- # NOTE: merely symbolic, not to be used in matchers
+  priority: .inf
+  name: !ruby/symbol :off

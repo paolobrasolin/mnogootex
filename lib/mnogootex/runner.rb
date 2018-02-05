@@ -2,7 +2,8 @@
 
 require 'colorize'
 
-require 'mnogootex/log/tagger'
+require 'mnogootex/log'
+require 'mnogootex/log/processor'
 
 module Mnogootex
   class Runner
@@ -61,37 +62,21 @@ module Mnogootex
     end
 
     def print_details
-      tagger = Log::Tagger.new configuration['matchers']
+      processor = Log::Processor.new matchers: Mnogootex::Log::MATCHERS,
+                                     levels: Mnogootex::Log::LEVELS,
+                                     min_level: :info,
+                                     colorize: true,
+                                     indent_width: 4
+
       puts 'Details:'
       @jobs.each do |job|
         if job.success?
           puts '  ' + '✔'.green + ' ' + File.basename(job.cls)
         else
           puts '  ' + '✘'.red + ' ' + File.basename(job.cls)
-          puts render_tagged_log tagger.parse(job.log)
+          puts processor.run(job.log)
         end
       end
-    end
-
-    COLOURS = {
-      trace: :white,
-      info: :light_white,
-      warning: :light_yellow,
-      error: :light_red
-    }.freeze
-
-    LEVELS = {
-      trace: 0,
-      info: 1,
-      warning: 2,
-      error: 3
-    }.freeze
-
-    def render_tagged_log(tagged_log)
-      tagged_log.
-        select { |line| LEVELS[line.loglvl] >= LEVELS[:info] }.
-        each { |line| line.text = line.text.send(COLOURS[line.loglvl]) }.
-        map(&:text).join("\n").gsub(/^/, ' ' * 4).chomp
     end
 
     def state_logger
