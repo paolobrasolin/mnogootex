@@ -12,7 +12,7 @@ module Mnogootex
       # @return [Array<Line>]
       def self.strings_to_lines!(strings)
         strings.map! do |line|
-          Line.new nil, line.chomp
+          Line.new line.chomp, nil
         end
       end
 
@@ -85,7 +85,7 @@ module Mnogootex
       # {Processor.filter_lines! filter},
       # {Processor.colorize_lines! color} and
       # {Processor.render_lines! render} them
-      # using its initialization parameters.
+      # using its {Processor.initialize initialization} parameters.
       #
       # @param lines [Array<String>]
       # @return [Array<String>]

@@ -7,3 +7,5 @@ end
 
 require 'minitest/autorun'
 require 'minitest/color'
+
+require 'mnogootex'
