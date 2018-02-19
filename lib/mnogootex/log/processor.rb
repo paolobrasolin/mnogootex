@@ -5,6 +5,16 @@ require 'mnogootex/log/line'
 
 module Mnogootex
   module Log
+    # This class exposes methods to
+    # {Processor.strings_to_lines! convert} strings into {Line}s that can be
+    # {Processor.tag_lines! tagged},
+    # {Processor.filter_lines! filtered},
+    # {Processor.colorize_lines! colored} (using {Level}s and {Matcher}s to define how)
+    # and finally
+    # {Processor.render_lines! rendered} into printable content.
+    #
+    # It can also be {Processor.initialize instantiated} with a specific configuration
+    # to {#run} the whole process repeatably on multiple inputs.
     class Processor
       # Converts strings into {Line}s.
       #

@@ -62,8 +62,8 @@ module Mnogootex
     end
 
     def print_details
-      processor = Log::Processor.new matchers: Mnogootex::Log::MATCHERS,
-                                     levels: Mnogootex::Log::LEVELS,
+      processor = Log::Processor.new matchers: Mnogootex::Log::DEFAULT_MATCHERS,
+                                     levels: Mnogootex::Log::DEFAULT_LEVELS,
                                      min_level: :info,
                                      colorize: true,
                                      indent_width: 4

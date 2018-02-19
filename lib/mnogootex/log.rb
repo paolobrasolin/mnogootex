@@ -4,11 +4,18 @@ require 'mnogootex/log/level'
 require 'mnogootex/log/matcher'
 
 module Mnogootex
+  # {Log} implements means to reduce log floods into filtered, color coded and human friendly summaries.
+  #
+  # * {Line}s are log lines.
+  # * {Level}s define log levels, their priority and color coding.
+  # * {Matcher}s define patterns to determine the level of log lines.
+  # * {Processor}s implement all transformations.
+  #
   module Log
-    # NOTE: we're dealing with these defaults to effortlessly allow for configurability in some future release
-    LEVELS_PATH = Pathname.new(__dir__).join('configuration', 'defaults.levels.yml')
-    MATCHERS_PATH = Pathname.new(__dir__).join('configuration', 'defaults.matchers.yml')
-
+    # Generates a hash of named levels from an array of hashes containing their attributes.
+    #
+    # @param levels [Array<Hash>]
+    # @return [Hash<Symbol, Level>]
     def self.build_levels_hash(levels)
       levels.map do |level|
         [
@@ -22,6 +29,10 @@ module Mnogootex
       end.to_h
     end
 
+    # Generates an array of matchers from an array of hashes containing their attributes.
+    #
+    # @param matchers [Array<Hash>]
+    # @return [Array<Matcher>]
     def self.build_matchers_array(matchers)
       matchers.map do |matcher|
         Matcher.new matcher.fetch('regexp'),
@@ -30,7 +41,9 @@ module Mnogootex
       end
     end
 
-    LEVELS = build_levels_hash(YAML.load_file(LEVELS_PATH)).freeze
-    MATCHERS = build_matchers_array(YAML.load_file(MATCHERS_PATH)).freeze
+    DEFAULT_LEVELS_PATH = Pathname.new(__dir__).join('configuration', 'defaults.levels.yml')
+    DEFAULT_MATCHERS_PATH = Pathname.new(__dir__).join('configuration', 'defaults.matchers.yml')
+    DEFAULT_LEVELS = build_levels_hash(YAML.load_file(DEFAULT_LEVELS_PATH)).freeze
+    DEFAULT_MATCHERS = build_matchers_array(YAML.load_file(DEFAULT_MATCHERS_PATH)).freeze
   end
 end
