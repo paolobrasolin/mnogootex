@@ -7,7 +7,21 @@ require 'mnogootex/constants'
 
 module Mnogootex
   class CLI < Thor
-    # class_option :verbose, type: :boolean
+    IS_MNOGOO = ENV['IS_MNOGOO'] == 'true'
+
+    def self.basename
+      IS_MNOGOO ? 'mnogoo' : super
+    end
+
+    desc 'cd [JOB] [MAIN]',
+         'Check into target dir relative to JOB for MAIN document'
+    def cd(*args); end
+
+    desc 'open [JOBS ...] [MAIN]',
+         'Open target PDFs relative to JOBS for MAIN document'
+    def open(*args); end
+
+    remove_command :cd, :open unless IS_MNOGOO
 
     desc 'mnogoo',
          'Print path of the shell wrapper script mnogoo'
