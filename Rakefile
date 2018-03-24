@@ -25,4 +25,3 @@ namespace :spec do
     Kernel.system(*arguments) || raise('Mutant task is not successful')
   end
 end
-

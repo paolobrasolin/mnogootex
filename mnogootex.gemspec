@@ -37,9 +37,9 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
 
   spec.add_development_dependency 'bundler', '~> 1.16.1'
   spec.add_development_dependency 'byebug', '~> 10.0.0'
-  # spec.add_development_dependency 'minitest', '~> 5.11.3'
-  # spec.add_development_dependency 'minitest-color', '~> 0.0.2'
-  spec.add_development_dependency 'mutant-rspec', '~> 0.8.14'
+  # spec.add_development_dependency 'mutant-rspec', '~> 0.8.14'
+  spec.add_development_dependency 'guard', '~> 2.14.2'
+  spec.add_development_dependency 'guard-rspec', '~> 4.7.3'
   spec.add_development_dependency 'rake', '~> 10.4.2'
   spec.add_development_dependency 'rspec', '~> 3.6.0'
   spec.add_development_dependency 'rubocop', '~> 0.52.1'
