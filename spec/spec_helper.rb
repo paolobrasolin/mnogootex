@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'timeout'
+
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
 
@@ -114,4 +116,9 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
+
+  # Timeout to help mutant
+  config.around(:each) do |example|
+    Timeout.timeout(1, &example)
+  end
 end

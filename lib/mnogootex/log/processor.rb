@@ -3,6 +3,8 @@
 require 'mnogootex/log'
 require 'mnogootex/log/line'
 
+require 'colorize'
+
 module Mnogootex
   module Log
     # This class exposes methods to
@@ -35,7 +37,7 @@ module Mnogootex
         tail_length, matcher = 0 # , nil
         lines.each do |line|
           if tail_length.zero?
-            matcher = matchers.detect { |m| line.text =~ m.regexp }
+            matcher = matchers.detect { |m| m.regexp.match? line.text }
             tail_length = matcher&.length&.-(1) || 0
           else # still on the tail of the previous match
             tail_length -= 1
@@ -64,7 +66,7 @@ module Mnogootex
       # @return [Array<Line>]
       def self.colorize_lines!(lines, levels:)
         lines.each do |line|
-          line.text = line.text.colorize(levels[line.level].color)
+          line.text = line.text.colorize(levels.fetch(line.level).color)
         end
       end
 
