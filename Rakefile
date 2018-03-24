@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'mutant'
+require 'dry/inflector'
+
 require 'rspec/core/rake_task'
 
 namespace :spec do
@@ -13,15 +16,10 @@ namespace :spec do
   end
 
   desc 'run Mutant'
-  task :mutant do
-    arguments = %w[
-      bundle exec mutant
-      --use rspec
-      --zombie
-    ]
-
-    arguments.concat(%w[-- Mnogootex::Configuration])
-
-    Kernel.system(*arguments) || raise('Mutant task is not successful')
+  task :mutant, [:subject] do |_, args|
+    subjects = [args[:subject]].compact
+    subjects << 'Mnogootex*' if subjects.empty?
+    successful = ::Mutant::CLI.run(%w[--use rspec --fail-fast] + subjects)
+    raise('Mutant task is not successful') unless successful
   end
 end

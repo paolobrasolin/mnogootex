@@ -36,22 +36,21 @@ module ::Guard # :: mandatory for inline guards
         match = path.match(/(?:spec|lib)\/(.*?)(?:_spec)?.rb/).captures.first
         inflector.camelize match
       end
-      succesful = ::Mutant::CLI.run(%w(--use rspec --fail-fast) + subjects)
+      succesful = ::Mutant::CLI.run(%w[--use rspec --fail-fast] + subjects)
       throw :task_has_failed unless succesful
       self
     end
   end
 end
 
-guard :mutant do
-  require 'guard/rspec/dsl'
-  dsl = Guard::RSpec::Dsl.new(self)
+# guard :mutant do
+#   require 'guard/rspec/dsl'
+#   dsl = Guard::RSpec::Dsl.new(self)
 
-  # RSpec files
-  watch(dsl.rspec.spec_helper) { dsl.rspec.spec_dir }
-  watch(dsl.rspec.spec_files)
+#   # RSpec files
+#   watch(dsl.rspec.spec_helper) { dsl.rspec.spec_dir }
+#   watch(dsl.rspec.spec_files)
 
-  # Ruby files
-  dsl.watch_spec_files_for(dsl.ruby.lib_files)
-end
-
+#   # Ruby files
+#   dsl.watch_spec_files_for(dsl.ruby.lib_files)
+# end
