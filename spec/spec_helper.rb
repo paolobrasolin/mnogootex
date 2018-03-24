@@ -3,6 +3,9 @@
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
 
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+
   SimpleCov.configure do
     track_files 'lib/**/*.rb'
     add_filter '/spec/'
