@@ -1,11 +1,28 @@
 # frozen_string_literal: true
 
-# require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
 
-require 'rake/testtask'
+namespace :spec do
+  desc 'run RSpec'
+  RSpec::Core::RakeTask.new(:rspec)
 
-Rake::TestTask.new do |t|
-  t.pattern = 'test/**/*_test.rb'
+  desc 'run SimpleCov'
+  task :simplecov do
+    ENV['COVERAGE'] = 'true'
+    Rake::Task['spec:rspec'].invoke
+  end
+
+  desc 'run Mutant'
+  task :mutant do
+    arguments = %w[
+      bundle exec mutant
+      --use rspec
+      --zombie
+    ]
+
+    arguments.concat(%w[-- Mnogootex::Configuration])
+
+    Kernel.system(*arguments) || raise('Mutant task is not successful')
+  end
 end
 
-# task default: :spec

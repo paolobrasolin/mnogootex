@@ -22,7 +22,7 @@ module Mnogootex
       # @return [Array<Line>]
       def self.strings_to_lines!(strings)
         strings.map! do |line|
-          Line.new line.chomp, nil
+          Line.new line.chomp
         end
       end
 
@@ -53,7 +53,7 @@ module Mnogootex
       # @return [Array<Line>]
       def self.filter_lines!(lines, levels:, min_level:)
         lines.select! do |line|
-          levels[line.level].priority >= levels[min_level].priority
+          levels.fetch(line.level).priority >= levels.fetch(min_level).priority
         end
       end
 

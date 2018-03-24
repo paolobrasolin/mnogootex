@@ -5,18 +5,16 @@ require 'pathname'
 
 module Mnogootex
   class Configuration < Hash
-    def initialize(basename:, defaults: {})
+    def initialize(basename:, defaults:)
       @paths = []
       @basename = basename
-      @defaults = defaults
-      merge! @defaults
+      merge! defaults
     end
 
-    def load(pathname = Pathname.pwd)
-      scan_cfg Pathname(pathname)
+    def load(pathname)
+      scan_cfg pathname.realpath
       filter_cfg
       merge! load_cfg
-      self
     end
 
     private
@@ -28,16 +26,14 @@ module Mnogootex
     end
 
     def filter_cfg
-      @paths.
-        select!(&:readable?).
-        reject!(&:zero?)
+      @paths.select!(&:readable?)
+      @paths.reject!(&:zero?)
     end
 
     def load_cfg
-      @paths.
-        reverse.
-        map { |pathname| YAML.load_file pathname }.
-        inject(&:merge!) # TODO: deep merge
+      @paths.reverse!
+      @paths.map! { |pathname| YAML.load_file pathname }
+      @paths.inject(&:merge!) # TODO: deep merge
     end
   end
 end
