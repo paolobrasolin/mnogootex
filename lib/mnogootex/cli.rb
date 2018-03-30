@@ -54,7 +54,7 @@ module Mnogootex
       if jobs.empty?
         puts main.dirname
       else
-        jobs.map! { |job| Mnogootex::Job::Worker.new cls: job, source: main }
+        jobs.map! { |job| Mnogootex::Job::Worker.new id: job, source: main }
         jobs.map!(&:target_dir)
         puts jobs
       end
@@ -68,8 +68,8 @@ module Mnogootex
       if jobs.empty?
         puts Dir.glob(main.dirname.join('*.pdf')).first
       else
-        jobs.map! { |job| Mnogootex::Job::Worker.new cls: job, source: main }
-        jobs.map!(&:output_path)
+        jobs.map! { |job| Mnogootex::Job::Worker.new id: job, source: main }
+        jobs.map! { |j| j.output_path.sub_ext('.pdf') }
         puts jobs
       end
     end

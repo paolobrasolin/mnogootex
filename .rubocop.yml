@@ -1,6 +1,9 @@
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 Metrics/LineLength:
   Max: 120
 Layout/DotPosition:
   EnforcedStyle: trailing
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*_spec.rb
