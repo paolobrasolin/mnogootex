@@ -4,6 +4,8 @@ require 'thor'
 require 'pathname'
 
 require 'mnogootex/constants'
+require 'mnogootex/utils'
+require 'mnogootex/errors'
 
 module Mnogootex
   class CLI < Thor
@@ -33,7 +35,7 @@ module Mnogootex
          'Clean up all temporary files'
     def clobber
       tmp_dir = Pathname.new(Dir.tmpdir).join('mnogootex')
-      tmp_dir_size = humanize_bytes dir_size(tmp_dir)
+      tmp_dir_size = Mnogootex::Utils.humanize_bytes Mnogootex::Utils.dir_size(tmp_dir)
       print "Freeing up #{tmp_dir_size}... "
       FileUtils.rm_r tmp_dir, secure: true if tmp_dir.directory?
       puts 'Done.'
@@ -54,7 +56,7 @@ module Mnogootex
       if jobs.empty?
         puts main.dirname
       else
-        jobs.map! { |job| Mnogootex::Job::Porter.new hid: job, source_path: main }
+        jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main }
         jobs.map!(&:target_dir)
         puts jobs
       end
@@ -68,8 +70,8 @@ module Mnogootex
       if jobs.empty?
         puts Dir.glob(main.dirname.join('*.pdf')).first
       else
-        jobs.map! { |job| Mnogootex::Job::Porter.new hid: job, source_path: main }
-        jobs.map! { |j| j.output_path.sub_ext('.pdf') }
+        jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main }
+        jobs.map! { |porter| porter.output_path.sub_ext('.pdf') }
         puts jobs
       end
     end
@@ -108,19 +110,6 @@ module Mnogootex
       main = main.realpath
       raise DiscombobulatedError unless Pathname.pwd == main.dirname
       main
-    end
-
-    def dir_size(mask)
-      Dir.glob(Pathname.new(mask).join('**', '*')).
-        map! { |f| Pathname.new(f).size }.inject(:+) || 0
-    end
-
-    def humanize_bytes(size)
-      return "#{size}b"  if  size          < 1024
-      return "#{size}Kb" if (size /= 1024) < 1024
-      return "#{size}Mb" if (size /= 1024) < 1024
-      return "#{size}Gb" if (size /= 1024) < 1024
-      return "#{size}Tb" if  size /= 1024
     end
   end
 end

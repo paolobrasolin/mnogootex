@@ -10,5 +10,17 @@ module Mnogootex
         tr('+/', '-_'). # make then url/path-safe
         chomp('==') # drop last 2 padding bytes
     end
+
+    def self.humanize_bytes(size)
+      %w[b Kb Mb Gb Tb Pb Eb Zb Yb].reduce(size) do |magnitude, unit|
+        break "#{magnitude}#{unit}" if magnitude < 1024
+        magnitude / 1024
+      end
+    end
+
+    def self.dir_size(mask)
+      Dir.glob(Pathname.new(mask).join('**', '*')).
+        map! { |f| Pathname.new(f).size }.inject(:+) || 0
+    end
   end
 end

@@ -5,46 +5,46 @@ require 'colorize'
 module Mnogootex
   module Job
     class Logger < Thread
-      def initialize(animation:, processor:, runners:, porters:)
-        @animation_frames = animation
-        @animation_length = animation.length
-        @processor = processor
-        @runners = runners
-        @porters = porters
+      def initialize(spinner:, processor:, runners:, porters:)
         super do
-          while @runners.any?(&:alive?)
-            print_status
+          while runners.any?(&:alive?)
+            self.class.print_status(runners: runners, spinner: spinner)
             sleep 0.02 # 50 fps
           end
-          print_status
+          self.class.print_status(runners: runners, spinner: spinner)
           puts
-          print_outcomes
+          self.class.print_outcome(runners: runners, porters: porters, processor: processor)
         end
       end
 
-      def print_status
-        icons = []
-        @runners.each do |runner|
-          icon = @animation_frames[runner.count_lines % @animation_length]
-          icons << if runner.alive?
-                     icon.yellow
-                   elsif runner.successful?
-                     icon.green
-                   else
-                     icon.red
-                   end
+      class << self
+        def print_status(runners:, spinner:)
+          spinners_frames = []
+          runners.each do |runner|
+            spinner_frame = spinner[runner.count_lines % spinner.size]
+            spinners_frames << colour_by_state(spinner_frame, runner)
+          end
+          print "Runners: #{spinners_frames.join}\r"
         end
-        print 'Runners: ' + icons.join + "\r"
-      end
 
-      def print_outcomes
-        puts 'Outcome:'
-        @porters.zip(@runners).each do |porter, runner|
-          if runner.successful?
-            puts '  ' + '✔'.green + ' ' + porter.hid
+        def print_outcome(runners:, porters:, processor:)
+          puts 'Outcome:'
+          porters.zip(runners).each do |porter, runner|
+            outcome_icon = runner.successful? ? '✔'.green : '✘'.red
+            puts "  #{outcome_icon} #{porter.hid}"
+            puts processor.call(runner.stream_lines) unless runner.successful?
+          end
+        end
+
+        private
+
+        def colour_by_state(string, runner)
+          if runner.alive?
+            string.yellow
+          elsif runner.successful?
+            string.green
           else
-            puts '  ' + '✘'.red + ' ' + porter.hid
-            puts @processor.call(runner.stream_lines)
+            string.red
           end
         end
       end

@@ -70,7 +70,7 @@ module Mnogootex
 
       def init_and_exec_logger
         @logger = Mnogootex::Job::Logger.new(
-          animation: @configuration['animation'],
+          spinner: @configuration['animation'],
           processor: @processor.method(:run),
           runners: @runners,
           porters: @porters
