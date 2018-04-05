@@ -4,34 +4,47 @@ require 'colorize'
 
 module Mnogootex
   module Job
-    class Logger
-      def initialize(animation:, processor:, workers:)
+    class Logger < Thread
+      def initialize(animation:, processor:, runners:, porters:)
         @animation_frames = animation
         @animation_length = animation.length
         @processor = processor
-        @workers = workers
+        @runners = runners
+        @porters = porters
+        super do
+          while @runners.any?(&:alive?)
+            print_status
+            sleep 0.02 # 50 fps
+          end
+          print_status
+          puts
+          print_outcomes
+        end
       end
 
       def print_status
-        icons = @workers.map do |job|
-          icon = @animation_frames[job.log.length % @animation_length]
-          if job.running?
-            icon.yellow
-          else
-            job.success? ? icon.green : icon.red
-          end
+        icons = []
+        @runners.each do |runner|
+          icon = @animation_frames[runner.count_lines % @animation_length]
+          icons << if runner.alive?
+                     icon.yellow
+                   elsif runner.successful?
+                     icon.green
+                   else
+                     icon.red
+                   end
         end
-        print 'Workers: ' + icons.join + "\r"
+        print 'Runners: ' + icons.join + "\r"
       end
 
-      def print_outcome
+      def print_outcomes
         puts 'Outcome:'
-        @workers.each do |job|
-          if job.success?
-            puts '  ' + '✔'.green + ' ' + File.basename(job.id)
+        @porters.zip(@runners).each do |porter, runner|
+          if runner.successful?
+            puts '  ' + '✔'.green + ' ' + porter.hid
           else
-            puts '  ' + '✘'.red + ' ' + File.basename(job.id)
-            puts @processor.call(job.log)
+            puts '  ' + '✘'.red + ' ' + porter.hid
+            puts @processor.call(runner.stream_lines)
           end
         end
       end

@@ -43,7 +43,7 @@ module Mnogootex
          'Run compilation JOBS for MAIN document'
     def go(*args)
       _, main, opts = recombobulate(*args)
-      Mnogootex::Job::Manager.new(source: main, configuration: opts).start
+      Mnogootex::Job::Warden.new(source: main, configuration: opts).start
     end
 
     desc 'dir [JOBS ...] [MAIN]',
@@ -54,7 +54,7 @@ module Mnogootex
       if jobs.empty?
         puts main.dirname
       else
-        jobs.map! { |job| Mnogootex::Job::Worker.new id: job, source: main }
+        jobs.map! { |job| Mnogootex::Job::Porter.new hid: job, source_path: main }
         jobs.map!(&:target_dir)
         puts jobs
       end
@@ -68,7 +68,7 @@ module Mnogootex
       if jobs.empty?
         puts Dir.glob(main.dirname.join('*.pdf')).first
       else
-        jobs.map! { |job| Mnogootex::Job::Worker.new id: job, source: main }
+        jobs.map! { |job| Mnogootex::Job::Porter.new hid: job, source_path: main }
         jobs.map! { |j| j.output_path.sub_ext('.pdf') }
         puts jobs
       end

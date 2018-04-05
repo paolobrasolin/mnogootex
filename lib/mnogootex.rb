@@ -3,8 +3,7 @@
 require 'mnogootex/version'
 require 'mnogootex/configuration'
 require 'mnogootex/cli'
-require 'mnogootex/job/worker'
-require 'mnogootex/job/manager'
+require 'mnogootex/job/warden'
 
 module Mnogootex
 end
