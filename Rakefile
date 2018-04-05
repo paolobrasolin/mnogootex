@@ -7,7 +7,9 @@ require 'rspec/core/rake_task'
 
 namespace :spec do
   desc 'run RSpec'
-  RSpec::Core::RakeTask.new(:rspec)
+  RSpec::Core::RakeTask.new(:rspec) do |task|
+    task.rspec_opts = "--format documentation"
+  end
 
   desc 'run SimpleCov'
   task :simplecov do
