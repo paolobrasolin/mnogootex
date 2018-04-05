@@ -119,6 +119,6 @@ RSpec.configure do |config|
 
   # Timeout to help mutant
   config.around(:each) do |example|
-    Timeout.timeout(1, &example)
+    Timeout.timeout(0.3, &example)
   end
 end

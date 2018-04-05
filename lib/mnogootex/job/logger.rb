@@ -32,7 +32,7 @@ module Mnogootex
           porters.zip(runners).each do |porter, runner|
             outcome_icon = runner.successful? ? '✔'.green : '✘'.red
             puts "  #{outcome_icon} #{porter.hid}"
-            puts processor.call(runner.stream_lines) unless runner.successful?
+            puts processor.call(runner.log_lines) unless runner.successful?
           end
         end
 

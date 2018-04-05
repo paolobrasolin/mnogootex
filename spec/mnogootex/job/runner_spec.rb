@@ -12,7 +12,8 @@ describe Mnogootex::Job::Runner do
 
   it 'executes commandline in given dir' do
     runner = described_class.new(cl: 'pwd', chdir: test_dir)
-    expect(runner.stream_lines.join.chomp).to eq(test_dir.realpath.to_s)
+    expect(runner).to be_successful
+    expect(runner.log_lines.join.chomp).to eq(test_dir.realpath.to_s)
   end
 
   describe '#alive?' do
@@ -41,8 +42,8 @@ describe Mnogootex::Job::Runner do
   end
 
   describe '#count_lines' do
-    let!(:rndch) { <<~SHELL }
-      function rndch { cat /dev/urandom | LC_ALL=C tr -dc '[:graph:]' | head -c $1; };
+    let!(:lns) { <<~SHELL }
+      lns () { for ((i=1;i<=$1;i++)); do echo $i; done };
     SHELL
 
     it 'starts from zero on empty stream' do
@@ -53,14 +54,14 @@ describe Mnogootex::Job::Runner do
     end
 
     it 'starts from zero on full stream' do
-      runner = described_class.new(cl: "#{rndch} rndch 160;", chdir: test_dir)
+      runner = described_class.new(cl: "#{lns} lns 2;", chdir: test_dir)
       expect(runner).to be_successful # waits
       expect(runner.count_lines).to eq(0)
       expect(runner.count_lines).to eq(1)
     end
 
     it 'increases till lines estimate is reached' do
-      runner = described_class.new(cl: "#{rndch} rndch 240;", chdir: test_dir)
+      runner = described_class.new(cl: "#{lns} lns 3;", chdir: test_dir)
       expect(runner).to be_successful # waits
       expect(runner.count_lines).to eq(0)
       expect(runner.count_lines).to eq(1)
@@ -69,16 +70,7 @@ describe Mnogootex::Job::Runner do
     end
 
     it 'plateaus when lines estimate is reached' do
-      runner = described_class.new(cl: "#{rndch} rndch 160;", chdir: test_dir)
-      expect(runner).to be_successful # waits
-      expect(runner.count_lines).to eq(0)
-      expect(runner.count_lines).to eq(1)
-      expect(runner.count_lines).to eq(2)
-      expect(runner.count_lines).to eq(2)
-    end
-
-    it 'estimates a line to be 80 chars' do
-      runner = described_class.new(cl: "#{rndch} rndch 81;", chdir: test_dir)
+      runner = described_class.new(cl: "#{lns} lns 2;", chdir: test_dir)
       expect(runner).to be_successful # waits
       expect(runner.count_lines).to eq(0)
       expect(runner.count_lines).to eq(1)
