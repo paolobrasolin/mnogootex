@@ -18,7 +18,8 @@ require 'mutant'
 require 'dry/inflector'
 require 'guard/compat/plugin'
 
-module ::Guard # :: mandatory for inline guards
+# NOTE: :: is mandatory for inline guards
+module ::Guard # rubocop:disable Style/ClassAndModuleChildren
   class Mutant < Plugin
     def initialize(options = {})
       opts = options.dup
@@ -33,7 +34,7 @@ module ::Guard # :: mandatory for inline guards
     def run_on_modifications(paths)
       inflector = Dry::Inflector.new
       subjects = paths.map do |path|
-        match = path.match(/(?:spec|lib)\/(.*?)(?:_spec)?.rb/).captures.first
+        match = path.match(%r{(?:spec|lib)\/(.*?)(?:_spec)?.rb}).captures.first
         inflector.camelize match
       end
       succesful = ::Mutant::CLI.run(%w[--use rspec --fail-fast] + subjects)

@@ -7,3 +7,6 @@ Layout/DotPosition:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*_spec.rb
+# TODO: re-enable
+Style/Documentation:
+  Enabled: false

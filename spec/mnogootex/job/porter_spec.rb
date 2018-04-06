@@ -43,7 +43,7 @@ describe Mnogootex::Job::Porter do
     it 'has a deterministic location' do
       hash = Mnogootex::Utils.short_md5(test_dir.join('a', 'main.file').realpath.to_s)
       expect(porter_a1.target_dir.to_s).
-        to match(%r(\A.+/mnogootex/#{hash}/#{1}\z))
+        to match(%r{\A.+/mnogootex/#{hash}/#{1}\z})
     end
 
     it 'discriminates by hid' do
