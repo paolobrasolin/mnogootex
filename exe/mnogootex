@@ -3,4 +3,4 @@
 
 require 'mnogootex'
 
-Mnogootex::CLI.start ARGV
+Mnogootex::CLI::Application.start ARGV

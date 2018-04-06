@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 require 'mnogootex/version'
-require 'mnogootex/configuration'
-require 'mnogootex/cli'
-require 'mnogootex/job/warden'
+require 'mnogootex/cli/application'
 
 module Mnogootex
 end
