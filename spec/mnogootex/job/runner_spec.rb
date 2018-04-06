@@ -43,7 +43,7 @@ describe Mnogootex::Job::Runner do
 
   describe '#count_lines' do
     let!(:lns) { <<~SHELL }
-      lns () { for ((i=1;i<=$1;i++)); do echo $i; done };
+      lns () { i=1; while [ "$i" -le $1 ]; do echo $i; i=$(( i + 1 )); done };
     SHELL
 
     it 'starts from zero on empty stream' do
