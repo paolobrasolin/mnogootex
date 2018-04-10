@@ -1,0 +1,29 @@
+- !ruby/struct:Mnogootex::Log::Level
+  priority: -.inf
+  name: !ruby/symbol all
+  # NOTE: merely symbolic, not to be used in matchers
+
+- !ruby/struct:Mnogootex::Log::Level
+  priority: 0
+  name: !ruby/symbol trace
+  color: !ruby/symbol white
+
+- !ruby/struct:Mnogootex::Log::Level
+  priority: 1
+  name: !ruby/symbol info
+  color: !ruby/symbol light_white
+
+- !ruby/struct:Mnogootex::Log::Level
+  priority: 2
+  name: !ruby/symbol warning
+  color: !ruby/symbol light_yellow
+
+- !ruby/struct:Mnogootex::Log::Level
+  priority: 3
+  name: !ruby/symbol error
+  color: !ruby/symbol light_red
+
+- !ruby/struct:Mnogootex::Log::Level
+  priority: .inf
+  name: !ruby/symbol off
+  # NOTE: merely symbolic, not to be used in matchers

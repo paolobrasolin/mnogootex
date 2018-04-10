@@ -1,12 +1,10 @@
 # frozen_string_literal: true
+# :nocov:
 
 require 'thor'
 require 'pathname'
 
-require 'mnogootex/constants'
 require 'mnogootex/utils'
-require 'mnogootex/errors'
-require 'mnogootex/configuration'
 require 'mnogootex/job/warden'
 require 'mnogootex/job/porter'
 require 'mnogootex/cli/recombobulator'
@@ -14,7 +12,7 @@ require 'mnogootex/cli/recombobulator'
 module Mnogootex
   module CLI
     class Application < Thor
-      IS_MNOGOO = ENV['IS_MNOGOO'] == 'true'
+      IS_MNOGOO = (ENV['IS_MNOGOO'] == 'true').freeze
 
       def self.basename
         IS_MNOGOO ? 'mnogoo' : super
@@ -39,6 +37,7 @@ module Mnogootex
       desc 'clobber',
            'Clean up all temporary files'
       def clobber
+        # NOTE: this is a tad slow - using shell would improve that
         tmp_dir = Pathname.new(Dir.tmpdir).join('mnogootex')
         tmp_dir_size = Mnogootex::Utils.humanize_bytes Mnogootex::Utils.dir_size(tmp_dir)
         print "Freeing up #{tmp_dir_size}... "

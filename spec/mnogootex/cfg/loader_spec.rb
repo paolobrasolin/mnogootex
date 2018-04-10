@@ -5,9 +5,9 @@ require 'spec_helper'
 require 'yaml'
 require 'tmpdir'
 
-require 'mnogootex/configuration'
+require 'mnogootex/cfg/loader'
 
-describe Mnogootex::Configuration do
+describe Mnogootex::Cfg::Loader do
   context 'fake file structure' do
     subject { described_class.new(basename: 'cfg.yml', defaults: {}) }
 

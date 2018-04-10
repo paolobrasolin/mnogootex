@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# :nocov:
 
 require 'colorize'
 
@@ -70,7 +71,7 @@ module Mnogootex
 
       def init_and_exec_logger
         @logger = Mnogootex::Job::Logger.new(
-          spinner: @configuration['animation'],
+          spinner: @configuration['spinner'],
           processor: @processor.method(:run),
           runners: @runners,
           porters: @porters

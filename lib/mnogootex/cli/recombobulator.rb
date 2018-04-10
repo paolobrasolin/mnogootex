@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
+require 'mnogootex/cfg'
+require 'mnogootex/cfg/loader'
+
 module Mnogootex
   module CLI
     module Recombobulator
+      class Error < StandardError; end
+      class DiscombobulatedError < Error; end
+
       def self.parse_jobs_main(*args)
         return [[], nil] if args.empty?
         return [args[0..-2], args.last] if Pathname.new(args.last).file?
@@ -11,8 +17,8 @@ module Mnogootex
 
       def self.parse(*args)
         jobs, mainable = parse_jobs_main(*args)
-        cfg = Mnogootex::Configuration.new basename: Mnogootex::CFG_BASENAME,
-                                           defaults: Mnogootex::CFG_DEFAULTS
+        cfg = Mnogootex::Cfg::Loader.new basename: Mnogootex::Cfg::BASENAME,
+                                         defaults: Mnogootex::Cfg::DEFAULTS
 
         if !mainable.nil? && (main = Pathname.new(mainable)).file?
           main = main.realpath

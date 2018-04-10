@@ -27,9 +27,8 @@ module ::Guard # rubocop:disable Style/ClassAndModuleChildren
       super(opts) # important to call + avoid passing options Guard doesn't understand
     end
 
-    # def run_all
-    #   # TODO?
-    # end
+    # TODO: how would this make sense?
+    # def run_all; end
 
     def run_on_modifications(paths)
       inflector = Dry::Inflector.new
