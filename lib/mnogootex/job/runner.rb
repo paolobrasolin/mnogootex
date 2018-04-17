@@ -23,6 +23,7 @@ module Mnogootex
       end
 
       def count_lines
+        return @log_lines.size unless alive?
         @ticks = [@ticks || -1, @log_lines.size - 1].min + 1
       end
 
@@ -31,7 +32,7 @@ module Mnogootex
       def start_poller
         Thread.new do
           until (line = @stream.gets).nil?
-            @log_lines << line
+            log_lines << line
           end
         end
       end
