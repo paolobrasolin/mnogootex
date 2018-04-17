@@ -41,7 +41,7 @@ describe Mnogootex::Job::Runner do
     end
   end
 
-  describe '#count_lines' do
+  xdescribe '#count_lines' do
     let!(:lns) { <<~SHELL }
       lns () { i=1; while [ "$i" -le $1 ]; do echo $i; i=$(( i + 1 )); done };
     SHELL

@@ -40,7 +40,8 @@ describe Mnogootex::Utils do
       expect(described_class.dir_size(tmpdir)).to eq(0)
     end
 
-    it 'measures a subtree' do
+    # TODO: non-file sizes are os-dependent; find smart way to test
+    xit 'measures a subtree' do
       tmpdir.join('foo').write('foo' * 100)
       tmpdir.join('bar').write('bar' * 200)
       tmpdir.join('baz').mkpath # 96 bytes here
