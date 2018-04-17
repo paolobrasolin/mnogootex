@@ -17,7 +17,7 @@ module Mnogootex
       end
 
       def self.try_args(*args)
-        main = Pathname.new(args.last)
+        main = Pathname.new(args.last || '')
         return [args, nil, nil] unless main.file?
         [args[0..-2], main.realpath, default_cfg.load(main.realdirpath)]
       end
