@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# :nocov:
+
 require 'mnogootex/cfg'
 require 'mnogootex/cfg/loader'
 
