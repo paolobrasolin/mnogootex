@@ -35,15 +35,15 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.16.1'
-  spec.add_development_dependency 'byebug', '~> 10.0.0'
+  spec.add_development_dependency 'bundler', '~> 1.16'
+  spec.add_development_dependency 'byebug', '~> 10.0'
   spec.add_development_dependency 'dry-inflector', '~> 0.1.1'
-  spec.add_development_dependency 'guard', '~> 2.14.2'
-  spec.add_development_dependency 'guard-rspec', '~> 4.7.3'
+  spec.add_development_dependency 'guard', '~> 2.14'
+  spec.add_development_dependency 'guard-rspec', '~> 4.7'
   spec.add_development_dependency 'mutant', '~> 0.8.14'
   spec.add_development_dependency 'mutant-rspec', '~> 0.8.14'
-  spec.add_development_dependency 'rake', '~> 10.4.2'
-  spec.add_development_dependency 'rspec', '~> 3.6.0'
+  spec.add_development_dependency 'rake', '~> 10.4'
+  spec.add_development_dependency 'rspec', '~> 3.6'
   spec.add_development_dependency 'rubocop', '~> 0.52.1'
   spec.add_development_dependency 'simplecov', '~> 0.15.1'
   spec.add_development_dependency 'yard', '~> 0.9.12'
