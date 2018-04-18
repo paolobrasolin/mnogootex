@@ -20,17 +20,17 @@ module Mnogootex
       end
 
       desc 'cd [JOB] [MAIN]',
-           'Check into target dir relative to JOB for MAIN document'
+           'Check into dir of JOB (or source) for MAIN (or inferred) document'
       def cd(*args); end
 
-      desc 'open [JOBS ...] [MAIN]',
-           'Open target PDFs relative to JOBS for MAIN document'
+      desc 'open [JOB ...] [MAIN]',
+           'Open PDF of each (or every) JOB for MAIN (or inferred) document'
       def open(*args); end
 
       remove_command :cd, :open unless IS_MNOGOO
 
       desc 'mnogoo',
-           'Print path of the shell wrapper script mnogoo'
+           'Print path of the shell wrapper script'
       def mnogoo
         puts Pathname.new(__dir__).join('cli', 'mnogoo.sh')
       end
@@ -46,15 +46,15 @@ module Mnogootex
         puts 'Done.'
       end
 
-      desc 'go [JOBS ...] [MAIN]',
-           'Run compilation JOBS for MAIN document'
+      desc 'go [JOB ...] [MAIN]',
+           'Run each (or every) JOB for MAIN (or inferred) document'
       def go(*args)
         _, main, opts = Mnogootex::CLI::Recombobulator.parse(*args)
         Mnogootex::Job::Warden.new(source: main, configuration: opts).start
       end
 
-      desc 'dir [JOBS ...] [MAIN]',
-           'Print target dirs relative to JOBS for MAIN document'
+      desc 'dir [JOB] [MAIN]',
+           'Print dir of JOB (or source) for MAIN (or inferred) document'
       def dir(*args)
         jobs, main, = Mnogootex::CLI::Recombobulator.parse(*args)
 
@@ -67,18 +67,15 @@ module Mnogootex
         end
       end
 
-      desc 'pdf [JOBS ...] [MAIN]',
-           'Print pdf paths relative to JOBS for MAIN document'
+      desc 'pdf [JOB ...] [MAIN]',
+           'Print PDF path of each (or every) JOB for MAIN (or inferred) document'
       def pdf(*args)
-        jobs, main, = Mnogootex::CLI::Recombobulator.parse(*args)
+        jobs, main, cfg = Mnogootex::CLI::Recombobulator.parse(*args)
 
-        if jobs.empty?
-          puts Dir.glob(main.dirname.join('*.pdf')).first
-        else
-          jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main }
-          jobs.map! { |porter| porter.target_path.sub_ext('.pdf') }
-          puts jobs
-        end
+        jobs = cfg['jobs'] if jobs.empty?
+        jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main }
+        jobs.map! { |porter| porter.target_path.sub_ext('.pdf') }
+        puts jobs
       end
     end
   end
