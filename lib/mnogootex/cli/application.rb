@@ -76,7 +76,7 @@ module Mnogootex
           puts Dir.glob(main.dirname.join('*.pdf')).first
         else
           jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main }
-          jobs.map! { |porter| porter.output_path.sub_ext('.pdf') }
+          jobs.map! { |porter| porter.target_path.sub_ext('.pdf') }
           puts jobs
         end
       end
