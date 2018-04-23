@@ -49,8 +49,9 @@ module Mnogootex
       desc 'go [JOB ...] [MAIN]',
            'Run each (or every) JOB for MAIN (or inferred) document'
       def go(*args)
-        _, main, opts = Mnogootex::CLI::Recombobulator.parse(*args)
-        Mnogootex::Job::Warden.new(source: main, configuration: opts).start
+        _, main, cfg = Mnogootex::CLI::Recombobulator.parse(*args)
+        cfg = Mnogootex::Cfg::DEFAULTS.merge cfg
+        Mnogootex::Job::Warden.new(source: main, configuration: cfg).start
       end
 
       desc 'dir [JOB] [MAIN]',

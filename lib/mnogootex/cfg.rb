@@ -7,8 +7,15 @@ require 'pathname'
 
 module Mnogootex
   module Cfg
-    DEFAULTS_PATH = Pathname.new(__dir__).join('cfg')
-    DEFAULTS = YAML.load_file(DEFAULTS_PATH.join('defaults.yml'))
     BASENAME = '.mnogootex.yml'
+    DEFAULTS = YAML.load_file(Pathname.new(__dir__).join(BASENAME))
+
+    def self.load_descending(pathname:, basename:)
+      pathname.realpath.descend.
+        map { |path| path.join(basename) }.
+        select(&:exist?).reject(&:zero?).
+        map { |path| YAML.load_file(path) }.
+        reduce(&:merge!)
+    end
   end
 end

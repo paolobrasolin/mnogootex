@@ -3,43 +3,46 @@
 # :nocov:
 
 require 'mnogootex/cfg'
-require 'mnogootex/cfg/loader'
-require 'mnogootex/utils'
+require 'mnogootex/core_ext'
 
 module Mnogootex
   module CLI
     module Recombobulator
       def self.parse(*args)
-        jobs, main, cfg = try_args(*args)
-        jobs, main, cfg = try_link(*args) if main.nil?
-        jobs, main, cfg = try_cfgs(*args) if main.nil?
-        [jobs, main, cfg]
+        try_args(*args) || try_link(*args) || try_cfgs(*args)
       end
 
       def self.try_args(*args)
-        main = Pathname.new(args.last || '')
-        return [args, nil, nil] unless main.file?
-        [args[0..-2], main.realpath, default_cfg.load(main.dirname)]
+        main = Pathname.new(args.fetch(-1, ''))
+        return unless main.file?
+
+        main = main.realpath
+        cfg = Mnogootex::Cfg.load_descending(pathname: main.dirname, basename: Mnogootex::Cfg::BASENAME)
+        jobs = args[0..-2].unless(&:empty?)
+
+        [jobs, main, cfg]
       end
 
       def self.try_link(*args)
         link = Pathname.pwd.ascend.map { |p| p.join('.mnogootex.src') }.detect(&:symlink?)
-        return [args, nil, nil] if link.nil?
-        main = link.readlink
-        [args, main.realpath, default_cfg.load(main.dirname)]
+        return if link.nil?
+
+        main = link.readlink.realpath
+        cfg = Mnogootex::Cfg.load_descending(pathname: main.dirname, basename: Mnogootex::Cfg::BASENAME)
+        jobs = args
+
+        [jobs, main, cfg]
       end
 
       def self.try_cfgs(*args)
         yaml = Pathname.pwd.ascend.map { |p| p.join('.mnogootex.yml') }.detect(&:file?)
-        return [args, nil, nil] if yaml.nil?
-        cfg = default_cfg.load(yaml.dirname)
-        main = yaml.dirname.join(cfg.fetch('main', ''))
-        [args, (main.file? ? main.realpath : nil), cfg]
-      end
+        return if yaml.nil?
 
-      def self.default_cfg
-        Mnogootex::Cfg::Loader.new basename: Mnogootex::Cfg::BASENAME,
-                                   defaults: Mnogootex::Cfg::DEFAULTS
+        cfg = Mnogootex::Cfg.load_descending(pathname: yaml.dirname, basename: Mnogootex::Cfg::BASENAME)
+        main = yaml.dirname.join(cfg.fetch('main', '')).if(&:file?)&.realpath
+        jobs = args
+
+        [jobs, main, cfg]
       end
     end
   end
