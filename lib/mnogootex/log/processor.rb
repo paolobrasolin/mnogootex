@@ -37,7 +37,7 @@ module Mnogootex
         tail_length, matcher = 0 # , nil
         lines.each do |line|
           if tail_length.zero?
-            matcher = matchers.detect { |m| m.regexp.match? line.text }
+            matcher = matchers.detect { |m| m.regexp === line.text }
             tail_length = matcher&.length&.-(1) || 0
           else # still on the tail of the previous match
             tail_length -= 1
