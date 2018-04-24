@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# :nocov:
-
 require 'mnogootex/log/level'
 require 'mnogootex/log/matcher'
 
