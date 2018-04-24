@@ -48,11 +48,23 @@ Run `mnogootex go ~/project/main.tex` and enjoy the technicolor:
 
 ## Usage
 
+Многоꙮтех can be invoked from commandline in two ways: `mnogootex` and `mnogoo`.
+The latter is more powerful and requires an extra [installation](#installation) step.
+
+Commands listed can be passed to both unless otherwise stated.
+
 ### Commands
+
+> **NOTATION:** `[FOO]` means that _`FOO` is optional_ while `FOO ...` means _one or more `FOO`s_. 
 
 #### `help [COMMAND]`
 
+Prints the help for `COMMAND` (or all commands if none is given).
+
 #### `mnogoo`
+
+Prints the location of the `mnogoo` shell integration script.
+Useful for its [installation](#installation).
 
 #### `go [JOB ...] [MAIN]`
 
@@ -60,7 +72,7 @@ Run `mnogootex go ~/project/main.tex` and enjoy the technicolor:
 
 #### `cd [JOB] [MAIN]`
 
-> Available through `mnogoo` only.
+> **NOTE:** recognized by `mnogoo` only.
 
 #### `clobber`
 
@@ -68,7 +80,7 @@ Run `mnogootex go ~/project/main.tex` and enjoy the technicolor:
 
 #### `open [JOB ...] [MAIN]`
 
-> Available through `mnogoo` only.
+> **NOTE:** recognized by `mnogoo` only.
 
 ### Configuration
 
