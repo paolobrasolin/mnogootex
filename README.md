@@ -48,7 +48,7 @@ Run `mnogootex go ~/project/main.tex` and enjoy the technicolor:
 
 ## Usage
 
-In essence, Многоꙮтех 
+In essence, Многоꙮтех
 1. takes the _source_ directory of a project, 
 2. clones it into _target_ directories (one for each _job_),
 3. applies a different source code transformation to each one and then
@@ -133,11 +133,40 @@ If no `JOB` list is given then all their output PDFs are opened.
 They are deduced from the [configuration](#configuration).
 
 If no `MAIN` document is given then it's deduced from either
-your current working directory or the [configuration](#configuration**.
+your current working directory or the [configuration](#configuration).
 
 ### Configuration
 
-> **TODO**
+Многоꙮтех is configured through [`YAML`](https://learnxinyminutes.com/docs/yaml/)
+files named `.mnogootex.yml` put into your projects' root directory.
+
+When  loads a configuration it also looks up for `.mnogootex.yml`
+files in all parent directories to merge then together (from the
+shallowest to the deepest path).  This means that e.g. you can keep
+a configuration file in your home folder and use it as a global
+configuration for all you projects, while overwriting only specific
+options in the configuration files of each one.
+
+Многоꙮтех currently accepts only two options.
+
+#### `spinner`
+
+This option is a string whose characters are the frames used to
+animate the spinners for the command line interface.
+
+    # Default value:
+    spinner: ⣾⣽⣻⢿⡿⣟⣯⣷
+
+#### `commandline`
+
+This option is an array of the components for the commandline used
+to compile documents.
+
+    # Default value:
+    commandline:
+      - latexmk
+      - -pdf
+      - --interaction=nonstopmode
 
 ## Contributing
 
