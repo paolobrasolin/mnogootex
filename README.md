@@ -86,33 +86,58 @@ If no `JOB` list is given then all of them are run.
 They are deduced from the [configuration](#configuration).
 
 If no `MAIN` document is given then it's deduced from either
-your current working directory (if you are in the temporary directory of a job)
-or the [configuration](#configuration).
+your current working directory or the [configuration](#configuration).
 
 #### `dir [JOB] [MAIN]`
 
 Print `JOB`'s temporary directory for the `MAIN` document.
 
-If no `JOB` list is given then all of them are run.
+If no `JOB` is given then it prints the source directory.
 
 If no `MAIN` document is given then it's deduced from either
-your current working directory (if you are in the temporary directory of a job)
-or the [configuration](#configuration).
+your current working directory or the [configuration](#configuration).
 
 #### `cd [JOB] [MAIN]`
 
 > **NOTE:** recognized by `mnogoo` only.
 
+Checks into `JOB`'s temporary directory for the `MAIN` document.
+
+If no `JOB` is given then it checks into the source directory.
+
+If no `MAIN` document is given then it's deduced from either
+your current working directory or the [configuration](#configuration).
+
 #### `clobber`
 
+Deletes all temporary files.
+Useful to free up some space from time to time.
+
 #### `pdf [JOB ...] [MAIN]`
+
+Print `JOB`'s output PDF path for the `MAIN` document.
+
+If no `JOB` list is given then all their output PDFs paths are printed.
+They are deduced from the [configuration](#configuration).
+
+If no `MAIN` document is given then it's deduced from either
+your current working directory or the [configuration](#configuration).
 
 #### `open [JOB ...] [MAIN]`
 
 > **NOTE:** recognized by `mnogoo` only.
 
+Open `JOB`'s output PDF for the `MAIN` document with your default viewer.
+
+If no `JOB` list is given then all their output PDFs are opened.
+They are deduced from the [configuration](#configuration).
+
+If no `MAIN` document is given then it's deduced from either
+your current working directory or the [configuration](#configuration**.
+
 ### Configuration
 
+> **TODO**
 
 ## Contributing
 
