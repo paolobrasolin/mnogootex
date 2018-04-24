@@ -48,10 +48,22 @@ Run `mnogootex go ~/project/main.tex` and enjoy the technicolor:
 
 ## Usage
 
+In essence, Многоꙮтех 
+1. takes the _source_ directory of a project, 
+2. clones it into _target_ directories (one for each _job_),
+3. applies a different source code transformation to each one and then
+4. attempts to compile them.
+
+Its convenience lies in the fact that it
+* automates the setup process,
+* parallelizes compilation,
+* filters and colour codes the infamous waterfall logs and
+* allows you to easily navigate through targets/source folders. 
+
 Многоꙮтех can be invoked from commandline in two ways: `mnogootex` and `mnogoo`.
 The latter is more powerful and requires an extra [installation](#installation) step.
 
-Commands listed can be passed to both unless otherwise stated.
+Commands listed below can be passed to both unless otherwise stated.
 
 ### Commands
 
@@ -73,11 +85,19 @@ Run given compilation `JOB`s for the `MAIN` document.
 If no `JOB` list is given then all of them are run.
 They are deduced from the [configuration](#configuration).
 
-If no `MAIN` document is given then it's deduced either from
+If no `MAIN` document is given then it's deduced from either
 your current working directory (if you are in the temporary directory of a job)
 or the [configuration](#configuration).
 
 #### `dir [JOB] [MAIN]`
+
+Print `JOB`'s temporary directory for the `MAIN` document.
+
+If no `JOB` list is given then all of them are run.
+
+If no `MAIN` document is given then it's deduced from either
+your current working directory (if you are in the temporary directory of a job)
+or the [configuration](#configuration).
 
 #### `cd [JOB] [MAIN]`
 
