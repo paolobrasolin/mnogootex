@@ -47,7 +47,7 @@ describe Mnogootex::Job::Runner do
     SHELL
 
     context 'dead process' do
-      subject { described_class.new(cl: "#{lns} lns 3; sleep #{LONG_TIME}", chdir: test_dir) }
+      subject { described_class.new(cl: "#{lns} lns 3", chdir: test_dir) }
 
       before do
         subject.successful? # waits on threads
@@ -59,14 +59,11 @@ describe Mnogootex::Job::Runner do
     end
 
     context 'alive process' do
-      LONG_TIME = 0.20
-      HEADSTART = 0.02
-
-      subject { described_class.new(cl: "#{lns} lns 3; sleep #{LONG_TIME}", chdir: test_dir) }
+      subject { described_class.new(cl: "#{lns} lns 3; sleep 0.20", chdir: test_dir) }
 
       before do
         subject
-        sleep HEADSTART
+        sleep 0.02
       end
 
       it 'unitarily increases from zero then plateaus at current line count' do
