@@ -44,16 +44,10 @@ project against:
       - scrartcl
       - scrbook
       
-Run `mnogootex` and enjoy the outuput:
+Run `mnogootex` and enjoy the technicolor:
 
-    $ mnogootex go ~/project/main.tex
-    Jobs: ⣾⣯⣷⣟
-    Details:
-      ✔ book
-      ✔ article
-      ✔ scrartcl
-      ✔ scrbook
-      
+![Demo TTY GIF](tty.gif?raw=true "Demo TTY GIF")
+
 ## Usage 
 
 > TODO
