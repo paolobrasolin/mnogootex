@@ -46,7 +46,31 @@ Run `mnogootex go ~/project/main.tex` and enjoy the technicolor:
 
 ![Demo TTY GIF](tty.gif?raw=true "Demo TTY GIF")
 
-<!-- ## Usage  -->
+## Usage
+
+### Commands
+
+#### `help [COMMAND]`
+
+#### `mnogoo`
+
+#### `go [JOB ...] [MAIN]`
+
+#### `dir [JOB] [MAIN]`
+
+#### `cd [JOB] [MAIN]`
+
+> Available through `mnogoo` only.
+
+#### `clobber`
+
+#### `pdf [JOB ...] [MAIN]`
+
+#### `open [JOB ...] [MAIN]`
+
+> Available through `mnogoo` only.
+
+### Configuration
 
 
 ## Contributing
