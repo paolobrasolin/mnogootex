@@ -40,13 +40,13 @@ describe Mnogootex::Utils do
       expect(described_class.dir_size(tmpdir)).to eq(0)
     end
 
-    # TODO: non-file sizes are os-dependent; find smart way to test
-    xit 'measures a subtree' do
+    it 'measures a subtree' do
       tmpdir.join('foo').write('foo' * 100)
       tmpdir.join('bar').write('bar' * 200)
-      tmpdir.join('baz').mkpath # 96 bytes here
+      tmpdir.join('baz').mkpath
       tmpdir.join('baz', 'qux').write('qux' * 300)
-      expect(described_class.dir_size(tmpdir.to_s)).to eq(300 + 600 + 96 + 900)
+      # NOTE: dir size is fs dependent, so let's not care about that
+      expect(described_class.dir_size(tmpdir.to_s)).to eq(300 + 600 + tmpdir.join('baz').size + 900)
     end
   end
 end
