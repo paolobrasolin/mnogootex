@@ -29,34 +29,25 @@ To install `mnogoo` (strongly recommended shell integration) add this to your sh
 
     [ -s "$(mnogootex mnogoo)" ] && . "$(mnogootex mnogoo)"
 
-## Getting started
+## Quick start
 
-Set up your `LaTeX` project as usual.
-Let's say its main file (i.e. the compilable one containing `\documentclass{...}`) is `~/project/main.tex`.
+Set up your `LaTeX` project as usual - let's say its main file is `~/project/main.tex` and contains `\documentclass{...}`.
 
-Create a configuration file `~/project_folder/.mnogootex.yml`
+Create a configuration file `~/project/.mnogootex.yml`
 containing the list of document classes you want to compile your
 project against:
 
     jobs:
-      - book
-      - article
       - scrartcl
-      - scrbook
+      - article
+      - book
       
-Run `mnogootex` and enjoy the technicolor:
+Run `mnogootex go ~/project/main.tex` and enjoy the technicolor:
 
 ![Demo TTY GIF](tty.gif?raw=true "Demo TTY GIF")
 
-## Usage 
+<!-- ## Usage  -->
 
-> TODO
-
-<!-- ## Development -->
-
-<!-- After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment. -->
-
-<!-- To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org). -->
 
 ## Contributing
 
