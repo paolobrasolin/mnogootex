@@ -41,41 +41,37 @@ describe Mnogootex::Job::Runner do
     end
   end
 
-  xdescribe '#count_lines' do
+  describe '#count_lines' do
     let!(:lns) { <<~SHELL }
       lns () { i=1; while [ "$i" -le $1 ]; do echo $i; i=$(( i + 1 )); done };
     SHELL
 
-    it 'starts from zero on empty stream' do
-      runner = described_class.new(cl: ':', chdir: test_dir)
-      expect(runner).to be_successful # waits
-      expect(runner.count_lines).to eq(0)
-      expect(runner.count_lines).to eq(0)
+    context 'dead process' do
+      subject { described_class.new(cl: "#{lns} lns 3; sleep #{LONG_TIME}", chdir: test_dir) }
+
+      before do
+        subject.successful? # waits on threads
+      end
+
+      it 'plateaus immediately at log lines count' do
+        [3, 3].each { |n| expect(subject.count_lines).to eq(n) }
+      end
     end
 
-    it 'starts from zero on full stream' do
-      runner = described_class.new(cl: "#{lns} lns 2;", chdir: test_dir)
-      expect(runner).to be_successful # waits
-      expect(runner.count_lines).to eq(0)
-      expect(runner.count_lines).to eq(1)
-    end
+    context 'alive process' do
+      LONG_TIME = 0.20
+      HEADSTART = 0.02
 
-    it 'increases till lines estimate is reached' do
-      runner = described_class.new(cl: "#{lns} lns 3;", chdir: test_dir)
-      expect(runner).to be_successful # waits
-      expect(runner.count_lines).to eq(0)
-      expect(runner.count_lines).to eq(1)
-      expect(runner.count_lines).to eq(2)
-      expect(runner.count_lines).to eq(3)
-    end
+      subject { described_class.new(cl: "#{lns} lns 3; sleep #{LONG_TIME}", chdir: test_dir) }
 
-    it 'plateaus when lines estimate is reached' do
-      runner = described_class.new(cl: "#{lns} lns 2;", chdir: test_dir)
-      expect(runner).to be_successful # waits
-      expect(runner.count_lines).to eq(0)
-      expect(runner.count_lines).to eq(1)
-      expect(runner.count_lines).to eq(2)
-      expect(runner.count_lines).to eq(2)
+      before do
+        subject
+        sleep HEADSTART
+      end
+
+      it 'unitarily increases from zero then plateaus at current line count' do
+        [0, 1, 2, 3, 3, 3].each { |n| expect(subject.count_lines).to eq(n) }
+      end
     end
   end
 end

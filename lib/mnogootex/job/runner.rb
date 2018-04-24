@@ -14,17 +14,16 @@ module Mnogootex
       end
 
       def alive?
-        @thread.alive? || @poller.alive?
+        @poller.alive?
       end
 
       def successful?
-        @poller.value
-        @thread.value.exitstatus.zero?
+        @poller.value.exitstatus.zero?
       end
 
       def count_lines
-        return @log_lines.size unless alive?
-        @ticks = [@ticks || -1, @log_lines.size - 1].min + 1
+        return log_lines.size unless alive?
+        @ticks = [@ticks || -1, log_lines.size - 1].min + 1
       end
 
       private
@@ -34,6 +33,8 @@ module Mnogootex
           until (line = @stream.gets).nil?
             log_lines << line
           end
+          # NOTE: waits on @thread and returns its value
+          @thread.value
         end
       end
     end
