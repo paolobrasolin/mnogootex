@@ -17,23 +17,23 @@ module Mnogootex
     end
 
     desc 'cd [JOB] [MAIN]',
-          'Check into dir of JOB (or source) for MAIN (or inferred) document'
+         'Check into dir of JOB (or source) for MAIN (or inferred) document'
     def cd(*args); end
 
     desc 'open [JOB ...] [MAIN]',
-          'Open PDF of each (or every) JOB for MAIN (or inferred) document'
+         'Open PDF of each (or every) JOB for MAIN (or inferred) document'
     def open(*args); end
 
     remove_command :cd, :open unless IS_MNOGOO
 
     desc 'mnogoo',
-          'Print path of the shell wrapper script'
+         'Print path of the shell wrapper script'
     def mnogoo
       puts Pathname.new('mnogoo.sh')
     end
 
     desc 'clobber',
-          'Clean up all temporary files'
+         'Clean up all temporary files'
     def clobber
       # NOTE: this is a tad slow - using shell would improve that
       tmp_dir = Pathname.new(Dir.tmpdir).join('mnogootex')
@@ -44,7 +44,7 @@ module Mnogootex
     end
 
     desc 'go [JOB ...] [MAIN]',
-          'Run each (or every) JOB for MAIN (or inferred) document'
+         'Run each (or every) JOB for MAIN (or inferred) document'
     def go(*args)
       _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
       cfg = Mnogootex::Cfg::DEFAULTS.merge cfg
@@ -52,7 +52,7 @@ module Mnogootex
     end
 
     desc 'dir [JOB] [MAIN]',
-          'Print dir of JOB (or source) for MAIN (or inferred) document'
+         'Print dir of JOB (or source) for MAIN (or inferred) document'
     def dir(*args)
       jobs, main, = Mnogootex::Cfg.recombobulate(*args)
 
@@ -66,7 +66,7 @@ module Mnogootex
     end
 
     desc 'pdf [JOB ...] [MAIN]',
-          'Print PDF path of each (or every) JOB for MAIN (or inferred) document'
+         'Print PDF path of each (or every) JOB for MAIN (or inferred) document'
     def pdf(*args)
       jobs, main, cfg = Mnogootex::Cfg.recombobulate(*args)
 
