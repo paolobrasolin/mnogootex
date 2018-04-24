@@ -6,7 +6,7 @@ require 'pathname'
 require 'mnogootex/utils'
 require 'mnogootex/job/warden'
 require 'mnogootex/job/porter'
-require 'mnogootex/cli/recombobulator'
+require 'mnogootex/cfg'
 
 module Mnogootex
   module CLI
@@ -47,7 +47,7 @@ module Mnogootex
       desc 'go [JOB ...] [MAIN]',
            'Run each (or every) JOB for MAIN (or inferred) document'
       def go(*args)
-        _, main, cfg = Mnogootex::CLI::Recombobulator.parse(*args)
+        _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
         cfg = Mnogootex::Cfg::DEFAULTS.merge cfg
         Mnogootex::Job::Warden.new(source: main, configuration: cfg).start
       end
@@ -55,7 +55,7 @@ module Mnogootex
       desc 'dir [JOB] [MAIN]',
            'Print dir of JOB (or source) for MAIN (or inferred) document'
       def dir(*args)
-        jobs, main, = Mnogootex::CLI::Recombobulator.parse(*args)
+        jobs, main, = Mnogootex::Cfg.recombobulate(*args)
 
         if jobs.empty?
           puts main.dirname
@@ -69,7 +69,7 @@ module Mnogootex
       desc 'pdf [JOB ...] [MAIN]',
            'Print PDF path of each (or every) JOB for MAIN (or inferred) document'
       def pdf(*args)
-        jobs, main, cfg = Mnogootex::CLI::Recombobulator.parse(*args)
+        jobs, main, cfg = Mnogootex::Cfg.recombobulate(*args)
 
         jobs = cfg['jobs'] if jobs.empty?
         jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main }
