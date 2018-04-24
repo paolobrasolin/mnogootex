@@ -71,11 +71,11 @@ Useful only for its [installation](#installation).
 Run given compilation `JOB`s for the `MAIN` document.
 
 If no `JOB` list is given then all of them are run.
-They are deduced from the (configuration)[#configuration].
+They are deduced from the [configuration](#configuration).
 
 If no `MAIN` document is given then it's deduced either from
 your current working directory (if you are in the temporary directory of a job)
-or the (configuration)[#configuration].
+or the [configuration](#configuration).
 
 #### `dir [JOB] [MAIN]`
 
