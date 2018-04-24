@@ -4,4 +4,3 @@ commandline:
   - latexmk
   - -pdf
   - --interaction=nonstopmode
-  - --shell-escape
