@@ -29,7 +29,7 @@ module Mnogootex
     desc 'mnogoo',
          'Print path of the shell wrapper script'
     def mnogoo
-      puts Pathname.new('mnogoo.sh')
+      puts Pathname.new(__dir__).join('mnogoo.sh').realpath
     end
 
     desc 'clobber',
