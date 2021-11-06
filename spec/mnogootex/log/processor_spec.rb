@@ -152,11 +152,11 @@ describe Mnogootex::Log::Processor do
       This is also a known irrelevant information flood...
         ... telling you that you'd better pay attention to warnings.
       I warned you, dude. Here's an ERROR. :(
-      LOG
+    LOG
 
-    levels = { trace:   Mnogootex::Log::Level.new(0, :trace),
+    levels = { trace: Mnogootex::Log::Level.new(0, :trace),
                warning: Mnogootex::Log::Level.new(1, :warning, :yellow),
-               error:   Mnogootex::Log::Level.new(2, :error, :red) }
+               error: Mnogootex::Log::Level.new(2, :error, :red) }
 
     matchers = [Mnogootex::Log::Matcher.new(/error/i, :error, 1),
                 Mnogootex::Log::Matcher.new(/warning/i, :warning, 1),

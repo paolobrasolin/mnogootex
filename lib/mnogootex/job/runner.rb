@@ -7,9 +7,9 @@ module Mnogootex
     class Runner
       attr_reader :hid, :log_lines
 
-      def initialize(cl:, chdir:)
+      def initialize(cmd:, chdir:)
         @log_lines = []
-        _, @stream, @thread = Open3.popen2e(*cl, chdir: chdir)
+        _, @stream, @thread = Open3.popen2e(*cmd, chdir: chdir)
         @poller = start_poller
       end
 
@@ -23,6 +23,7 @@ module Mnogootex
 
       def count_lines
         return log_lines.size unless alive?
+
         @ticks = [@ticks || -1, log_lines.size - 1].min + 1
       end
 

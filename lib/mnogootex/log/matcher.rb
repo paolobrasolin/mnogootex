@@ -12,6 +12,6 @@ module Mnogootex
     #   @return [Symbol] the associated log level
     # @!attribute length
     #   @return [Integer] the number of matched lines
-    Matcher = Struct.new(:regexp, :level, :length)
+    Matcher = Struct.new(:regexp, :level, :length) # rubocop:disable Lint/StructNewOverride
   end
 end

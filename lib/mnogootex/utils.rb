@@ -14,6 +14,7 @@ module Mnogootex
     def self.humanize_bytes(size)
       %w[b Kb Mb Gb Tb Pb Eb Zb Yb].reduce(size) do |magnitude, unit|
         break "#{magnitude}#{unit}" if magnitude < 1024
+
         magnitude / 1024
       end
     end

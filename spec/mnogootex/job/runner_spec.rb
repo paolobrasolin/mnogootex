@@ -11,19 +11,19 @@ describe Mnogootex::Job::Runner do
   after { test_dir.rmtree }
 
   it 'executes commandline in given dir' do
-    runner = described_class.new(cl: 'pwd', chdir: test_dir)
+    runner = described_class.new(cmd: 'pwd', chdir: test_dir)
     expect(runner).to be_successful
     expect(runner.log_lines.join.chomp).to eq(test_dir.realpath.to_s)
   end
 
   describe '#alive?' do
     it 'is true if thread is running' do
-      runner = described_class.new(cl: 'sleep 0.05', chdir: test_dir)
+      runner = described_class.new(cmd: 'sleep 0.05', chdir: test_dir)
       expect(runner).to be_alive
     end
 
     it 'is false if thread is dead' do
-      runner = described_class.new(cl: ':', chdir: test_dir)
+      runner = described_class.new(cmd: ':', chdir: test_dir)
       sleep 0.05
       expect(runner).to_not be_alive
     end
@@ -31,12 +31,12 @@ describe Mnogootex::Job::Runner do
 
   describe '#successful?' do
     it 'is true on zero exit status' do
-      runner = described_class.new(cl: 'exit 0', chdir: test_dir)
+      runner = described_class.new(cmd: 'exit 0', chdir: test_dir)
       expect(runner).to be_successful
     end
 
     it 'is false on nonzero exit status' do
-      runner = described_class.new(cl: 'exit 1', chdir: test_dir)
+      runner = described_class.new(cmd: 'exit 1', chdir: test_dir)
       expect(runner).to_not be_successful
     end
   end
@@ -47,7 +47,7 @@ describe Mnogootex::Job::Runner do
     SHELL
 
     context 'dead process' do
-      subject { described_class.new(cl: "#{lns} lns 3", chdir: test_dir) }
+      subject { described_class.new(cmd: "#{lns} lns 3", chdir: test_dir) }
 
       before do
         subject.successful? # waits on threads
@@ -59,7 +59,7 @@ describe Mnogootex::Job::Runner do
     end
 
     context 'alive process' do
-      subject { described_class.new(cl: "#{lns} lns 3; sleep 0.20", chdir: test_dir) }
+      subject { described_class.new(cmd: "#{lns} lns 3; sleep 0.20", chdir: test_dir) }
 
       before do
         subject

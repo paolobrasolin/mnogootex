@@ -19,7 +19,7 @@ end
 # require 'guard/compat/plugin'
 
 # # NOTE: :: is mandatory for inline guards
-# module ::Guard # rubocop:disable Style/ClassAndModuleChildren
+# module ::Guard
 #   class Mutant < Plugin
 #     def initialize(options = {})
 #       opts = options.dup

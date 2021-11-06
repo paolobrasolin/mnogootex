@@ -10,7 +10,7 @@ require 'mnogootex/cfg'
 
 module Mnogootex
   class CLI < Thor
-    IS_MNOGOO = (ENV['IS_MNOGOO'] == 'true').freeze
+    IS_MNOGOO = (ENV['IS_MNOGOO'] == 'true')
 
     def self.basename
       IS_MNOGOO ? 'mnogoo' : super

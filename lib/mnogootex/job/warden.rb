@@ -52,7 +52,7 @@ module Mnogootex
       def init_and_exec_runners
         @runners = @porters.map do |porter|
           Mnogootex::Job::Runner.new(
-            cl: commandline(porter.target_path),
+            cmd: commandline(porter.target_path),
             chdir: porter.target_dir
           )
         end
