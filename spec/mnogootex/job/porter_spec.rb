@@ -102,7 +102,7 @@ describe Mnogootex::Job::Porter do
     def relative_subtree(pathname)
       Pathname.glob(pathname.join('**', '{.*,*}')).map do |child|
         child.relative_path_from(pathname)
-      end
+      end.sort
     end
 
     it 'copies all source files' do
