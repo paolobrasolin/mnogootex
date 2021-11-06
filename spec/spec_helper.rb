@@ -117,8 +117,8 @@ RSpec.configure do |config|
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
 
-  # Timeout to help mutant
-  config.around(:each) do |example|
-    Timeout.timeout(0.1, &example)
-  end
+  # # Timeout to help mutant
+  # config.around(:each) do |example|
+  #   Timeout.timeout(0.1, &example)
+  # end
 end

@@ -12,45 +12,45 @@ guard :rspec, cmd: 'bundle exec rspec' do
   dsl.watch_spec_files_for(dsl.ruby.lib_files)
 end
 
-# TODO: refactor the following into a new version of guard-mutant
+# # TODO: refactor the following into a new version of guard-mutant
 
-require 'mutant'
-require 'dry/inflector'
-require 'guard/compat/plugin'
+# require 'mutant'
+# require 'dry/inflector'
+# require 'guard/compat/plugin'
 
-# NOTE: :: is mandatory for inline guards
-module ::Guard # rubocop:disable Style/ClassAndModuleChildren
-  class Mutant < Plugin
-    def initialize(options = {})
-      opts = options.dup
-      # @my_option = opts.delete(:my_special_option)
-      super(opts) # important to call + avoid passing options Guard doesn't understand
-    end
+# # NOTE: :: is mandatory for inline guards
+# module ::Guard # rubocop:disable Style/ClassAndModuleChildren
+#   class Mutant < Plugin
+#     def initialize(options = {})
+#       opts = options.dup
+#       # @my_option = opts.delete(:my_special_option)
+#       super(opts) # important to call + avoid passing options Guard doesn't understand
+#     end
 
-    # TODO: how would this make sense?
-    # def run_all; end
+#     # TODO: how would this make sense?
+#     # def run_all; end
 
-    def run_on_modifications(paths)
-      inflector = Dry::Inflector.new
-      subjects = paths.map do |path|
-        match = path.match(%r{(?:spec|lib)\/(.*?)(?:_spec)?.rb}).captures.first
-        inflector.camelize match
-      end
-      succesful = ::Mutant::CLI.run(%w[--use rspec --fail-fast] + subjects)
-      throw :task_has_failed unless succesful
-      self
-    end
-  end
-end
+#     def run_on_modifications(paths)
+#       inflector = Dry::Inflector.new
+#       subjects = paths.map do |path|
+#         match = path.match(%r{(?:spec|lib)\/(.*?)(?:_spec)?.rb}).captures.first
+#         inflector.camelize match
+#       end
+#       succesful = ::Mutant::CLI.run(%w[--use rspec --fail-fast] + subjects)
+#       throw :task_has_failed unless succesful
+#       self
+#     end
+#   end
+# end
 
-guard :mutant do
-  require 'guard/rspec/dsl'
-  dsl = Guard::RSpec::Dsl.new(self)
+# guard :mutant do
+#   require 'guard/rspec/dsl'
+#   dsl = Guard::RSpec::Dsl.new(self)
 
-  # RSpec files
-  # watch(dsl.rspec.spec_helper) { dsl.rspec.spec_dir }
-  watch(dsl.rspec.spec_files)
+#   # RSpec files
+#   # watch(dsl.rspec.spec_helper) { dsl.rspec.spec_dir }
+#   watch(dsl.rspec.spec_files)
 
-  # Ruby files
-  dsl.watch_spec_files_for(dsl.ruby.lib_files)
-end
+#   # Ruby files
+#   dsl.watch_spec_files_for(dsl.ruby.lib_files)
+# end
