@@ -36,7 +36,8 @@ module Mnogootex
         @configuration['jobs'].each do |cls|
           @porters << Mnogootex::Job::Porter.new(
             hid: cls,
-            source_path: @source
+            source_path: @source,
+            work_path: @configuration['work_path'],
           )
         end
       end

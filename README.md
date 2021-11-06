@@ -146,7 +146,7 @@ a configuration file in your home folder and use it as a global
 configuration for all you projects, while overwriting only specific
 options in the configuration files of each one.
 
-Многоꙮтех currently accepts only two options.
+Многоꙮтех currently accepts three options.
 
 #### `spinner`
 
@@ -166,6 +166,15 @@ to compile documents.
       - latexmk
       - -pdf
       - --interaction=nonstopmode
+
+#### `work_path`
+
+This option is an override for the path where compilation happens.
+
+    # Default value:
+    work_path: null
+
+By default each run happens in a new empty folder. Overriding this allows you to easily reach the compilation artifacts, but leaves handling cleanup and conflicts with previous runs up to you.
 
 ## Contributing
 

@@ -10,13 +10,14 @@ module Mnogootex
     class Porter
       attr_reader :hid
 
-      def initialize(hid:, source_path:)
+      def initialize(hid:, source_path:, work_path: nil)
         @source_path = Pathname.new(source_path).realpath
+        @work_path = calc_work_path(work_path).tap(&:mkpath).realpath
         @hid = hid
       end
 
       def target_dir
-        @target_dir ||= Pathname.new(Dir.tmpdir).join('mnogootex', source_id, hid)
+        @target_dir ||= @work_path.join(hid)
       end
 
       def target_path
@@ -29,13 +30,20 @@ module Mnogootex
 
       def provide
         target_dir.mkpath
-        # NOTE: can't use Pathname.join here since it elides the dot:
-        FileUtils.cp_r File.join(@source_path.dirname, '.'), target_dir
+        providable_files = @source_path.dirname.glob('*', File::FNM_DOTMATCH)[2..]
+        providable_files.reject!(&@work_path.method(:==))
+        FileUtils.cp_r providable_files, target_dir
         target_dir.join('.mnogootex.yml').tap { |p| p.delete if p.file? }
         target_dir.join('.mnogootex.src').make_symlink(@source_path)
       end
 
       private
+
+      def calc_work_path(path)
+        return Pathname.new(path) unless path.nil?
+
+        Pathname.new(Dir.tmpdir).join('mnogootex', source_id)
+      end
 
       def source_id
         @source_id ||= Utils.short_md5(@source_path.to_s)

@@ -36,6 +36,7 @@ module Mnogootex
          'Clean up all temporary files'
     def clobber
       # NOTE: this is a tad slow - using shell would improve that
+      # TODO: this does not account for custom work_path
       tmp_dir = Pathname.new(Dir.tmpdir).join('mnogootex')
       tmp_dir_size = Mnogootex::Utils.humanize_bytes Mnogootex::Utils.dir_size(tmp_dir)
       print "Freeing up #{tmp_dir_size}... "
@@ -54,12 +55,12 @@ module Mnogootex
     desc 'dir [JOB] [MAIN]',
          'Print dir of JOB (or source) for MAIN (or inferred) document'
     def dir(*args)
-      jobs, main, = Mnogootex::Cfg.recombobulate(*args)
+      jobs, main, cfg = Mnogootex::Cfg.recombobulate(*args)
 
       if jobs.empty?
         puts main.dirname
       else
-        jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main }
+        jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main, work_path: cfg['work_path'] }
         jobs.map!(&:target_dir)
         puts jobs
       end
@@ -71,7 +72,7 @@ module Mnogootex
       jobs, main, cfg = Mnogootex::Cfg.recombobulate(*args)
 
       jobs = cfg['jobs'] if jobs.empty?
-      jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main }
+      jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main, work_path: cfg['work_path'] }
       jobs.map! { |porter| porter.target_path.sub_ext('.pdf') }
       puts jobs
     end

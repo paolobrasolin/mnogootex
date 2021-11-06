@@ -4,3 +4,4 @@ commandline:
   - latexmk
   - -pdf
   - --interaction=nonstopmode
+work_path: null
