@@ -30,7 +30,7 @@ module Mnogootex
 
       def provide
         target_dir.mkpath
-        providable_files = @source_path.dirname.glob('*', File::FNM_DOTMATCH)[2..]
+        providable_files = @source_path.dirname.children
         providable_files.reject!(&@work_path.method(:==))
         FileUtils.cp_r providable_files, target_dir
         target_dir.join('.mnogootex.yml').tap { |p| p.delete if p.file? }
