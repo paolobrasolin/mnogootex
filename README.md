@@ -3,11 +3,10 @@
 [![Build Status](https://travis-ci.org/paolobrasolin/mnogootex.svg?branch=master)](https://travis-ci.org/paolobrasolin/mnogootex)
 [![Gem Version](https://badge.fury.io/rb/mnogootex.svg)](https://badge.fury.io/rb/mnogootex)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 [![Code Climate](https://codeclimate.com/github/paolobrasolin/mnogootex/badges/gpa.svg)](https://codeclimate.com/github/paolobrasolin/mnogootex)
-[![Test Coverage](https://codeclimate.com/github/paolobrasolin/mnogootex/badges/coverage.svg)](https://codeclimate.com/github/paolobrasolin/mnogootex/coverage)
-[![Inline docs](http://inch-ci.org/github/paolobrasolin/mnogootex.svg?branch=master)](http://inch-ci.org/github/paolobrasolin/mnogootex)
-[![Issue Count](https://codeclimate.com/github/paolobrasolin/mnogootex/badges/issue_count.svg)](https://codeclimate.com/github/paolobrasolin/mnogootex)
+<!-- [![Test Coverage](https://codeclimate.com/github/paolobrasolin/mnogootex/badges/coverage.svg)](https://codeclimate.com/github/paolobrasolin/mnogootex/coverage) -->
+<!-- [![Inline docs](http://inch-ci.org/github/paolobrasolin/mnogootex.svg?branch=master)](http://inch-ci.org/github/paolobrasolin/mnogootex) -->
+<!-- [![Issue Count](https://codeclimate.com/github/paolobrasolin/mnogootex/badges/issue_count.svg)](https://codeclimate.com/github/paolobrasolin/mnogootex) -->
 
 Многоꙮтех (mnogootex) is a utility that parallelizes compilation
 of a LaTeX document using different classes and offers a
@@ -19,7 +18,7 @@ document classes.
 
 ## Installation
 
-The only requirement is [Ruby](https://www.ruby-lang.org) (>=2.3).
+The only requirement is [Ruby](https://www.ruby-lang.org) (>=2.5 as earlier versions are untested).
 
 To install многоꙮтех execute
 
