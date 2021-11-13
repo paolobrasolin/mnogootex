@@ -1,12 +1,21 @@
 # Многоꙮтех
 
-[![Build Status](https://travis-ci.org/paolobrasolin/mnogootex.svg?branch=master)](https://travis-ci.org/paolobrasolin/mnogootex)
-[![Gem Version](https://badge.fury.io/rb/mnogootex.svg)](https://badge.fury.io/rb/mnogootex)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code Climate](https://codeclimate.com/github/paolobrasolin/mnogootex/badges/gpa.svg)](https://codeclimate.com/github/paolobrasolin/mnogootex)
-<!-- [![Test Coverage](https://codeclimate.com/github/paolobrasolin/mnogootex/badges/coverage.svg)](https://codeclimate.com/github/paolobrasolin/mnogootex/coverage) -->
-<!-- [![Inline docs](http://inch-ci.org/github/paolobrasolin/mnogootex.svg?branch=master)](http://inch-ci.org/github/paolobrasolin/mnogootex) -->
-<!-- [![Issue Count](https://codeclimate.com/github/paolobrasolin/mnogootex/badges/issue_count.svg)](https://codeclimate.com/github/paolobrasolin/mnogootex) -->
+[![CI tests status badge][build-shield]][build-url]
+[![Latest release badge][rubygems-shield]][rubygems-url]
+[![License badge][license-shield]][license-url]
+[![Maintainability badge][cc-maintainability-shield]][cc-maintainability-url]
+[![Test coverage badge][cc-coverage-shield]][cc-coverage-url]
+
+[build-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/mnogootex/CI/main?label=tests&logo=github
+[build-url]: https://github.com/paolobrasolin/mnogootex/actions/workflows/main.yml "CI tests status"
+[rubygems-shield]: https://img.shields.io/gem/v/mnogootex?logo=ruby
+[rubygems-url]: https://rubygems.org/gems/mnogootex "Latest release"
+[license-shield]: https://img.shields.io/github/license/paolobrasolin/mnogootex
+[license-url]: https://github.com/paolobrasolin/mnogootex/blob/main/LICENSE "License"
+[cc-maintainability-shield]: https://img.shields.io/codeclimate/maintainability/paolobrasolin/mnogootex?logo=codeclimate
+[cc-maintainability-url]: https://codeclimate.com/github/paolobrasolin/mnogootex "Maintainability"
+[cc-coverage-shield]: https://img.shields.io/codeclimate/coverage/paolobrasolin/mnogootex?logo=codeclimate&label=test%20coverage
+[cc-coverage-url]: https://codeclimate.com/github/paolobrasolin/mnogootex/coverage "Test coverage"
 
 Многоꙮтех (mnogootex) is a utility that parallelizes compilation
 of a LaTeX document using different classes and offers a
