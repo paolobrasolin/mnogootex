@@ -38,6 +38,7 @@ jobs:
         if: ${{ matrix.coverage && github.ref == 'refs/heads/main' }}
         env:
           CC_TEST_REPORTER_ID: 890ed5ee01002c7149920883256f8e4790000127faa9ddf14d86dd3ceb3b8179
+          COVERAGE: true
         with:
           coverageCommand: bundle exec rspec
           coverageLocations: ${{ github.workspace }}/coverage/coverage.json:simplecov
