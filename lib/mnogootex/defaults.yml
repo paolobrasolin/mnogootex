@@ -1,7 +1,3 @@
 # This is the default configuration file
 spinner: ⣾⣽⣻⢿⡿⣟⣯⣷
-commandline:
-  - latexmk
-  - -pdf
-  - --interaction=nonstopmode
 work_path: null

@@ -11,9 +11,12 @@ require 'mnogootex/job/logger'
 module Mnogootex
   module Job
     class Warden
-      def initialize(source:, configuration:)
+      LATEXMK_PATH = 'latexmk'
+
+      def initialize(source:, configuration:, flags:)
         @source = source
         @configuration = configuration
+        @flags = flags
 
         @processor = nil
         @porters = []
@@ -81,7 +84,8 @@ module Mnogootex
       # TODO: generalize, integrate with Runner
       def commandline(target_pathname)
         [
-          *@configuration['commandline'],
+          LATEXMK_PATH,
+          *@flags,
           target_pathname.basename.to_s
         ]
       end

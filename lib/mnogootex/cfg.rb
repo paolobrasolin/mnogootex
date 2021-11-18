@@ -25,15 +25,22 @@ module Mnogootex
     class << self
       private
 
+      def split_jobs_and_flags(args)
+        flags = args.drop_while { |arg| !arg.start_with?('-') }.unless(&:empty?)
+        jobs = args.take_while { |arg| !arg.start_with?('-') }.unless(&:empty?)
+        # TODO: some kind of validation?
+        [jobs, flags]
+      end
+
       def try_args(*args)
         main = Pathname.new(args.fetch(-1, ''))
         return unless main.file?
 
         main = main.realpath
         cfg = load_descending(pathname: main.dirname, basename: BASENAME)
-        jobs = args[0..-2].unless(&:empty?)
+        jobs, flags = split_jobs_and_flags(args[0..-2])
 
-        [jobs, main, cfg]
+        [jobs, flags, main, cfg]
       end
 
       def try_link(*args)
@@ -42,9 +49,9 @@ module Mnogootex
 
         main = link.readlink.realpath
         cfg = load_descending(pathname: main.dirname, basename: BASENAME)
-        jobs = args
+        jobs, flags = split_jobs_and_flags(args)
 
-        [jobs, main, cfg]
+        [jobs, flags, main, cfg]
       end
 
       def try_cfgs(*args)
@@ -53,9 +60,9 @@ module Mnogootex
 
         cfg = load_descending(pathname: yaml.dirname, basename: BASENAME)
         main = yaml.dirname.join(cfg.fetch('main', '')).if(&:file?)&.realpath
-        jobs = args
+        jobs, flags = split_jobs_and_flags(args)
 
-        [jobs, main, cfg]
+        [jobs, flags, main, cfg]
       end
     end
   end

@@ -31,15 +31,24 @@ module Mnogootex
     desc 'go [JOB ...] [MAIN]',
          'Run each (or every) JOB for MAIN (or inferred) document'
     def go(*args)
-      _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
-      cfg = Mnogootex::Cfg::DEFAULTS.merge cfg
-      Mnogootex::Job::Warden.new(source: main, configuration: cfg).start
+      jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
+      flags = ['-pdf', '-interaction=nonstopmode']
+      cfg = Mnogootex::Cfg::DEFAULTS.merge(cfg).merge({ 'jobs' => jobs }.compact)
+      Mnogootex::Job::Warden.new(source: main, configuration: cfg, flags: flags).start
+    end
+
+    desc 'exec [JOB ...] [LATEXMK_OPTION ...] [MAIN]',
+         'Run each (or every) JOB for MAIN (or inferred) document'
+    def exec(*args)
+      jobs, flags, main, cfg = Mnogootex::Cfg.recombobulate(*args)
+      cfg = Mnogootex::Cfg::DEFAULTS.merge(cfg).merge({ 'jobs' => jobs }.compact)
+      Mnogootex::Job::Warden.new(source: main, configuration: cfg, flags: flags).start
     end
 
     desc 'dir [JOB] [MAIN]',
          'Print dir of JOB (or source) for MAIN (or inferred) document'
     def dir(*args)
-      jobs, main, cfg = Mnogootex::Cfg.recombobulate(*args)
+      jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
 
       if jobs.empty?
         puts main.dirname
@@ -53,7 +62,7 @@ module Mnogootex
     desc 'pdf [JOB ...] [MAIN]',
          'Print PDF path of each (or every) JOB for MAIN (or inferred) document'
     def pdf(*args)
-      jobs, main, cfg = Mnogootex::Cfg.recombobulate(*args)
+      jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
 
       jobs = cfg['jobs'] if jobs.empty?
       jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main, work_path: cfg['work_path'] }

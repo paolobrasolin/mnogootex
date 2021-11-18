@@ -133,7 +133,7 @@ a configuration file in your home folder and use it as a global
 configuration for all you projects, while overwriting only specific
 options in the configuration files of each one.
 
-Многоꙮтех currently accepts three options.
+Многоꙮтех currently accepts two options.
 
 #### `spinner`
 
@@ -142,17 +142,6 @@ animate the spinners for the command line interface.
 
     # Default value:
     spinner: ⣾⣽⣻⢿⡿⣟⣯⣷
-
-#### `commandline`
-
-This option is an array of the components for the commandline used
-to compile documents.
-
-    # Default value:
-    commandline:
-      - latexmk
-      - -pdf
-      - --interaction=nonstopmode
 
 #### `work_path`
 
