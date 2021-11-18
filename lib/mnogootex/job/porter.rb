@@ -34,7 +34,7 @@ module Mnogootex
         providable_files.reject!(&@work_path.method(:==))
         FileUtils.cp_r providable_files, target_dir
         target_dir.join('.mnogootex.yml').tap { |p| p.delete if p.file? }
-        target_dir.join('.mnogootex.src').make_symlink(@source_path)
+        target_dir.join('.mnogootex.src').tap { |p| p.make_symlink(@source_path) unless p.symlink? }
       end
 
       private

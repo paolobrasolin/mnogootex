@@ -47,7 +47,7 @@ module Mnogootex
 
       def exec_porters
         @porters.each do |porter|
-          porter.clobber
+          # porter.clobber
           porter.provide
           transformer(porter.hid, porter.target_path)
         end
