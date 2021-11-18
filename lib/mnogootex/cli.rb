@@ -10,26 +10,10 @@ require 'mnogootex/cfg'
 
 module Mnogootex
   class CLI < Thor
-    IS_MNOGOO = (ENV['IS_MNOGOO'] == 'true')
-
-    def self.basename
-      IS_MNOGOO ? 'mnogoo' : super
-    end
-
-    desc 'cd [JOB] [MAIN]',
-         'Check into dir of JOB (or source) for MAIN (or inferred) document'
-    def cd(*args); end
-
     desc 'open [JOB ...] [MAIN]',
          'Open PDF of each (or every) JOB for MAIN (or inferred) document'
-    def open(*args); end
-
-    remove_command :cd, :open unless IS_MNOGOO
-
-    desc 'mnogoo',
-         'Print path of the shell wrapper script'
-    def mnogoo
-      puts Pathname.new(__dir__).join('mnogoo.sh').realpath
+    def open(*args);
+      raise "TODO: implement this w/ latexmk -pv"
     end
 
     desc 'clobber',

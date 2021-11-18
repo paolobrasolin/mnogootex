@@ -33,10 +33,6 @@ To install многоꙮтех execute
 
     gem install mnogootex
     
-To install `mnogoo` (strongly recommended shell integration) add this to your shell profile
-
-    [ -s "$(mnogootex mnogoo)" ] && . "$(mnogootex mnogoo)"
-
 ## Quick start
 
 Set up your `LaTeX` project as usual - let's say its main file is `~/project/main.tex` and contains `\documentclass{...}`.
@@ -81,11 +77,6 @@ Commands listed below can be passed to both unless otherwise stated.
 
 Prints the help for `COMMAND` (or all commands if none is given).
 
-#### `mnogoo`
-
-Prints the location of the `mnogoo` shell integration script.
-Useful only for its [installation](#installation).
-
 #### `go [JOB ...] [MAIN]`
 
 Run given compilation `JOB`s for the `MAIN` document.
@@ -101,17 +92,6 @@ your current working directory or the [configuration](#configuration).
 Print `JOB`'s temporary directory for the `MAIN` document.
 
 If no `JOB` is given then it prints the source directory.
-
-If no `MAIN` document is given then it's deduced from either
-your current working directory or the [configuration](#configuration).
-
-#### `cd [JOB] [MAIN]`
-
-> **NOTE:** recognized by `mnogoo` only.
-
-Checks into `JOB`'s temporary directory for the `MAIN` document.
-
-If no `JOB` is given then it checks into the source directory.
 
 If no `MAIN` document is given then it's deduced from either
 your current working directory or the [configuration](#configuration).
@@ -132,8 +112,6 @@ If no `MAIN` document is given then it's deduced from either
 your current working directory or the [configuration](#configuration).
 
 #### `open [JOB ...] [MAIN]`
-
-> **NOTE:** recognized by `mnogoo` only.
 
 Open `JOB`'s output PDF for the `MAIN` document with your default viewer.
 
