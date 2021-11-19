@@ -6,6 +6,8 @@ require 'io/wait'
 module Mnogootex
   module Job
     class Runner
+      POLLING_TIMEOUT = 0.02
+
       attr_reader :hid, :log_lines
 
       def initialize(cmd:, chdir:)
@@ -32,20 +34,25 @@ module Mnogootex
 
       def start_poller
         Thread.new do
-          loop do
-            if @stream.wait_readable(0.02).nil?
-              # If the stream timeouts and the thread is dead we expect no nore data.
-              # This happens on commands like `latexmk -pv` which fork other processes.
-              break unless @thread.alive?
-            else
-              # If we reach EOF, we expect no more data.
-              break if (line = @stream.gets).nil?
-              log_lines << line
-            end
-          end
+          polling_loop
 
           # NOTE: waits on @thread and returns its value
           @thread.value
+        end
+      end
+
+      def polling_loop
+        loop do
+          if @stream.wait_readable(POLLING_TIMEOUT).nil?
+            # If the stream timeouts and the thread is dead we expect no nore data.
+            # This happens on commands like `latexmk -pv` which fork other processes.
+            break unless @thread.alive?
+          else
+            # If we reach EOF, we expect no more data.
+            break if (line = @stream.gets).nil?
+
+            log_lines << line
+          end
         end
       end
     end

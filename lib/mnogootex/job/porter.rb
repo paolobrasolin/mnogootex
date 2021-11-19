@@ -33,11 +33,21 @@ module Mnogootex
         providable_files = @source_path.dirname.children
         providable_files.reject!(&@work_path.method(:==))
         FileUtils.cp_r providable_files, target_dir
-        target_dir.join('.mnogootex.yml').tap { |p| p.delete if p.file? }
-        target_dir.join('.mnogootex.src').tap { |p| p.make_symlink(@source_path) unless p.symlink? }
+        remove_configuration(target_dir)
+        create_link_to_source(target_dir)
       end
 
       private
+
+      def remove_configuration(folder_path)
+        path = folder_path.join('.mnogootex.yml')
+        path.delete if path.file?
+      end
+
+      def create_link_to_source(folder_path)
+        path = folder_path.join('.mnogootex.src')
+        path.make_symlink(@source_path) unless path.symlink?
+      end
 
       def calc_work_path(path)
         return Pathname.new(path) unless path.nil?

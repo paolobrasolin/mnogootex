@@ -172,7 +172,7 @@ describe Mnogootex::Log::Processor do
 
       expect(my_processor.run(log.lines)).to eq(
         ["    \e[0;33;49mHey, I'm warning you, dude. Stuff is gonna get bad.\e[0m\n",
-         "    \e[0;31;49mI warned you, dude. Here's an ERROR. :(\e[0m\n"]
+         "    \e[0;31;49mI warned you, dude. Here's an ERROR. :(\e[0m\n"],
       )
     end
 
@@ -185,7 +185,7 @@ describe Mnogootex::Log::Processor do
 
       expect(my_processor.run(log.lines)).to eq(
         ["    Hey, I'm warning you, dude. Stuff is gonna get bad.\n",
-         "    I warned you, dude. Here's an ERROR. :(\n"]
+         "    I warned you, dude. Here's an ERROR. :(\n"],
       )
     end
 

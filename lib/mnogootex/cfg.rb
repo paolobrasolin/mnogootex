@@ -8,8 +8,8 @@ module Mnogootex
     BASENAME = '.mnogootex.yml'
     DEFAULTS = {
       'spinner' => '⣾⣽⣻⢿⡿⣟⣯⣷',
-      'work_path' => nil,
-    }
+      'work_path' => nil
+    }.freeze
 
     def self.load_descending(pathname:, basename:)
       pathname.realpath.descend.
@@ -60,7 +60,8 @@ module Mnogootex
         return if yaml.nil?
 
         cfg = load_descending(pathname: yaml.dirname, basename: BASENAME)
-        main = yaml.dirname.join(cfg.fetch('main', '')).yield_self { |p| p.realpath if p.file? }
+        main = yaml.dirname.join(cfg.fetch('main', ''))
+        main = main.file? ? main.realpath : nil
         jobs, flags = split_jobs_and_flags(args)
 
         [jobs, flags, main, cfg]

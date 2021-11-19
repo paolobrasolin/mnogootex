@@ -5,6 +5,8 @@ Metrics/LineLength:
   Max: 120
 Layout/DotPosition:
   EnforcedStyle: trailing
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
 Metrics/BlockLength:
   Exclude:
     - spec/**/*_spec.rb

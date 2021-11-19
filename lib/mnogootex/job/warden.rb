@@ -57,7 +57,7 @@ module Mnogootex
         @runners = @porters.map do |porter|
           Mnogootex::Job::Runner.new(
             cmd: commandline(porter.target_path),
-            chdir: porter.target_dir
+            chdir: porter.target_dir,
           )
         end
       end
@@ -68,7 +68,7 @@ module Mnogootex
           levels: Mnogootex::Log::DEFAULT_LEVELS,
           min_level: :info,
           colorize: true,
-          indent_width: 4
+          indent_width: 4,
         )
       end
 
@@ -77,7 +77,7 @@ module Mnogootex
           spinner: @configuration['spinner'],
           processor: @processor.method(:run),
           runners: @runners,
-          porters: @porters
+          porters: @porters,
         )
       end
 
@@ -95,7 +95,7 @@ module Mnogootex
         old_code = target_pathname.read
         new_code = old_code.sub(
           /\\documentclass(\[.*?\])?{.*?}/,
-          "\\documentclass{#{new_class_name}}"
+          "\\documentclass{#{new_class_name}}",
         )
         target_pathname.write(new_code)
       end

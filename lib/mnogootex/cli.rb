@@ -30,7 +30,7 @@ module Mnogootex
 
     desc 'open [JOB ...] MAIN',
          'Open PDF of each (or every) JOB for MAIN document'
-    def open(*args);
+    def open(*args)
       jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
       flags = ['-pv', '-interaction=nonstopmode']
       cfg = Mnogootex::Cfg::DEFAULTS.merge(cfg).merge({ 'jobs' => jobs }.compact)
@@ -55,47 +55,46 @@ module Mnogootex
       Mnogootex::Job::Warden.new(source: main, configuration: cfg, flags: flags).start
     end
 
-  #   desc 'purge',
-  #        'Clean up all work files'
-  #   def purge 
-  #     _, _, _, cfg = Mnogootex::Cfg.recombobulate(*args)
-      
-  #     tmp_dir = if (path = cfg['work_path']).nil?
-  #       Pathname.new(Dir.tmpdir).join('mnogootex')
-  #     else
-  #       Pathname.new(path)
-  #     end
+    # desc 'purge',
+    #      'Clean up all work files'
+    # def purge
+    #   _, _, _, cfg = Mnogootex::Cfg.recombobulate(*args)
 
-  #     tmp_dir_size = Mnogootex::Utils.humanize_bytes Mnogootex::Utils.dir_size(tmp_dir)
-  #     print "Freeing up #{tmp_dir_size} in #{tmp_dir}... "
-  #     FileUtils.rm_r tmp_dir, secure: true if tmp_dir.directory?
-  #     puts 'Done.'
-  #   end
+    #   tmp_dir = if (path = cfg['work_path']).nil?
+    #     Pathname.new(Dir.tmpdir).join('mnogootex')
+    #   else
+    #     Pathname.new(path)
+    #   end
 
+    #   tmp_dir_size = Mnogootex::Utils.humanize_bytes Mnogootex::Utils.dir_size(tmp_dir)
+    #   print "Freeing up #{tmp_dir_size} in #{tmp_dir}... "
+    #   FileUtils.rm_r tmp_dir, secure: true if tmp_dir.directory?
+    #   puts 'Done.'
+    # end
 
-  #   desc 'dir [JOB] [MAIN]',
-  #        'Print dir of JOB (or source) for MAIN (or inferred) document'
-  #   def dir(*args)
-  #     jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
+    # desc 'dir [JOB] [MAIN]',
+    #      'Print dir of JOB (or source) for MAIN (or inferred) document'
+    # def dir(*args)
+    #   jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
 
-  #     if jobs.empty?
-  #       puts main.dirname
-  #     else
-  #       jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main, work_path: cfg['work_path'] }
-  #       jobs.map!(&:target_dir)
-  #       puts jobs
-  #     end
-  #   end
+    #   if jobs.empty?
+    #     puts main.dirname
+    #   else
+    #     jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main, work_path: cfg['work_path'] }
+    #     jobs.map!(&:target_dir)
+    #     puts jobs
+    #   end
+    # end
 
-  #   desc 'pdf [JOB ...] [MAIN]',
-  #        'Print PDF path of each (or every) JOB for MAIN (or inferred) document'
-  #   def pdf(*args)
-  #     jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
+    # desc 'pdf [JOB ...] [MAIN]',
+    #      'Print PDF path of each (or every) JOB for MAIN (or inferred) document'
+    # def pdf(*args)
+    #   jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
 
-  #     jobs = cfg['jobs'] if jobs.empty?
-  #     jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main, work_path: cfg['work_path'] }
-  #     jobs.map! { |porter| porter.target_path.sub_ext('.pdf') }
-  #     puts jobs
-  #   end
-  # end
+    #   jobs = cfg['jobs'] if jobs.empty?
+    #   jobs.map! { |hid| Mnogootex::Job::Porter.new hid: hid, source_path: main, work_path: cfg['work_path'] }
+    #   jobs.map! { |porter| porter.target_path.sub_ext('.pdf') }
+    #   puts jobs
+    # end
+  end
 end
