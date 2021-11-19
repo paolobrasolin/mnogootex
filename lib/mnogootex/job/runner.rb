@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'open3'
+require 'io/wait'
+require 'byebug'
 
 module Mnogootex
   module Job
@@ -31,9 +33,18 @@ module Mnogootex
 
       def start_poller
         Thread.new do
-          until (line = @stream.gets).nil?
-            log_lines << line
+          loop do
+            if @stream.wait_readable(0.02).nil?
+              # If the stream timeouts and the thread is dead we expect no nore data.
+              # This happens on commands like `latexmk -pv` which fork other processes.
+              break unless @thread.alive?
+            else
+              # If we reach EOF, we expect no more data.
+              break if (line = @stream.gets).nil?
+              log_lines << line
+            end
           end
+
           # NOTE: waits on @thread and returns its value
           @thread.value
         end
