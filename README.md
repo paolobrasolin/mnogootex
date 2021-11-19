@@ -3,17 +3,17 @@
 [![CI tests status badge][build-shield]][build-url]
 [![Latest release badge][rubygems-shield]][rubygems-url]
 [![License badge][license-shield]][license-url]
-[![ROOTtainability badge][cc-ROOTtainability-shield]][cc-ROOTtainability-url]
+[![Maintainability badge][cc-maintainability-shield]][cc-maintainability-url]
 [![Test coverage badge][cc-coverage-shield]][cc-coverage-url]
 
-[build-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/mnogootex/CI/ROOT?label=tests&logo=github
-[build-url]: https://github.com/paolobrasolin/mnogootex/actions/workflows/ROOT.yml "CI tests status"
+[build-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/mnogootex/CI/main?label=tests&logo=github
+[build-url]: https://github.com/paolobrasolin/mnogootex/actions/workflows/main.yml "CI tests status"
 [rubygems-shield]: https://img.shields.io/gem/v/mnogootex?logo=ruby
 [rubygems-url]: https://rubygems.org/gems/mnogootex "Latest release"
 [license-shield]: https://img.shields.io/github/license/paolobrasolin/mnogootex
-[license-url]: https://github.com/paolobrasolin/mnogootex/blob/ROOT/LICENSE "License"
-[cc-ROOTtainability-shield]: https://img.shields.io/codeclimate/ROOTtainability/paolobrasolin/mnogootex?logo=codeclimate
-[cc-ROOTtainability-url]: https://codeclimate.com/github/paolobrasolin/mnogootex "ROOTtainability"
+[license-url]: https://github.com/paolobrasolin/mnogootex/blob/main/LICENSE "License"
+[cc-maintainability-shield]: https://img.shields.io/codeclimate/maintainability/paolobrasolin/mnogootex?logo=codeclimate
+[cc-maintainability-url]: https://codeclimate.com/github/paolobrasolin/mnogootex "Maintainability"
 [cc-coverage-shield]: https://img.shields.io/codeclimate/coverage/paolobrasolin/mnogootex?logo=codeclimate&label=test%20coverage
 [cc-coverage-url]: https://codeclimate.com/github/paolobrasolin/mnogootex/coverage "Test coverage"
 
@@ -21,7 +21,7 @@
 of a LaTeX document using different classes and offers a
 meaningfully filtered output.
 
-The motivating use case is ROOTtaining a single preamble while
+The motivating use case is maintaining a single preamble while
 submitting a paper to many journals using their outdated or crummy
 document classes.
 
@@ -59,7 +59,7 @@ and remove any mention of `mnogootex` from your shell profile (it's not needed a
 First you write a LaTeX document:
 
 ```latex
-% ~/demo/ROOT.tex
+% ~/demo/main.tex
 \documentclass{scrarticle}
 \begin{document}
   \abstract{Simply put, my article is awesome.}
@@ -79,7 +79,7 @@ jobs:
 
 Finally you run `mnogootex build` and enjoy the technicolor:
 
-![A user types `mnogootex build ROOT.tex` in the console. Some spinners indicating progress appear. Then the outcome for each class is presented. Failing ones include abridged and color coded logs, to pinpoint the errors.](demo/demo.gif?raw=true "TTY demo GIF")
+![A user types `mnogootex build main.tex` in the console. Some spinners indicating progress appear. Then the outcome for each class is presented. Failing ones include abridged and color coded logs, to pinpoint the errors.](demo/demo.gif?raw=true "TTY demo GIF")
 
 ## Usage
 
