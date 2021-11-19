@@ -2,7 +2,6 @@
 
 require 'open3'
 require 'io/wait'
-require 'byebug'
 
 module Mnogootex
   module Job
