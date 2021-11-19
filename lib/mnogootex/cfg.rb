@@ -3,8 +3,6 @@
 require 'yaml'
 require 'pathname'
 
-require 'mnogootex/core_ext'
-
 module Mnogootex
   module Cfg
     BASENAME = '.mnogootex.yml'
@@ -29,10 +27,10 @@ module Mnogootex
       private
 
       def split_jobs_and_flags(args)
-        flags = args.drop_while { |arg| !arg.start_with?('-') }.unless(&:empty?)
-        jobs = args.take_while { |arg| !arg.start_with?('-') }.unless(&:empty?)
         # TODO: some kind of validation?
-        [jobs, flags]
+        flags = args.drop_while { |arg| !arg.start_with?('-') }
+        jobs = args.take_while { |arg| !arg.start_with?('-') }
+        [(jobs unless jobs.empty?), (flags unless flags.empty?)]
       end
 
       def try_args(*args)
@@ -62,7 +60,7 @@ module Mnogootex
         return if yaml.nil?
 
         cfg = load_descending(pathname: yaml.dirname, basename: BASENAME)
-        main = yaml.dirname.join(cfg.fetch('main', '')).if(&:file?)&.realpath
+        main = yaml.dirname.join(cfg.fetch('main', '')).yield_self { |p| p.realpath if p.file? }
         jobs, flags = split_jobs_and_flags(args)
 
         [jobs, flags, main, cfg]
