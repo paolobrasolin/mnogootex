@@ -3,17 +3,17 @@
 [![CI tests status badge][build-shield]][build-url]
 [![Latest release badge][rubygems-shield]][rubygems-url]
 [![License badge][license-shield]][license-url]
-[![Maintainability badge][cc-maintainability-shield]][cc-maintainability-url]
+[![ROOTtainability badge][cc-ROOTtainability-shield]][cc-ROOTtainability-url]
 [![Test coverage badge][cc-coverage-shield]][cc-coverage-url]
 
-[build-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/mnogootex/CI/main?label=tests&logo=github
-[build-url]: https://github.com/paolobrasolin/mnogootex/actions/workflows/main.yml "CI tests status"
+[build-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/mnogootex/CI/ROOT?label=tests&logo=github
+[build-url]: https://github.com/paolobrasolin/mnogootex/actions/workflows/ROOT.yml "CI tests status"
 [rubygems-shield]: https://img.shields.io/gem/v/mnogootex?logo=ruby
 [rubygems-url]: https://rubygems.org/gems/mnogootex "Latest release"
 [license-shield]: https://img.shields.io/github/license/paolobrasolin/mnogootex
-[license-url]: https://github.com/paolobrasolin/mnogootex/blob/main/LICENSE "License"
-[cc-maintainability-shield]: https://img.shields.io/codeclimate/maintainability/paolobrasolin/mnogootex?logo=codeclimate
-[cc-maintainability-url]: https://codeclimate.com/github/paolobrasolin/mnogootex "Maintainability"
+[license-url]: https://github.com/paolobrasolin/mnogootex/blob/ROOT/LICENSE "License"
+[cc-ROOTtainability-shield]: https://img.shields.io/codeclimate/ROOTtainability/paolobrasolin/mnogootex?logo=codeclimate
+[cc-ROOTtainability-url]: https://codeclimate.com/github/paolobrasolin/mnogootex "ROOTtainability"
 [cc-coverage-shield]: https://img.shields.io/codeclimate/coverage/paolobrasolin/mnogootex?logo=codeclimate&label=test%20coverage
 [cc-coverage-url]: https://codeclimate.com/github/paolobrasolin/mnogootex/coverage "Test coverage"
 
@@ -21,145 +21,263 @@
 of a LaTeX document using different classes and offers a
 meaningfully filtered output.
 
-The motivating use case is maintaining a single preamble while
+The motivating use case is ROOTtaining a single preamble while
 submitting a paper to many journals using their outdated or crummy
 document classes.
 
-## Installation
+## Getting started
 
-The only requirement is [Ruby](https://www.ruby-lang.org) (>=2.5 as earlier versions are untested).
+### Prerequisites
+
+Многоꙮтех is written in [**Ruby**](https://www.ruby-lang.org) and requires version `>=2.5` (earlier ones are untested).
+You can check whether it's installed by running `ruby --version`.
+For installation instructions you can refer to the [official documentation](https://www.ruby-lang.org/en/documentation/installation/).
+
+
+Многоꙮтех heavily relies on [**`latexmk`**](https://ctan.org/pkg/latexmk).
+You can check whether it's installed by running `latexmk --version`.
+If you are missing it, follow the documentation of your specific LaTeX distribution and install the `latexmk` package.
+
+### Installation
 
 To install многоꙮтех execute
 
-    gem install mnogootex
-    
-## Quick start
+```bash
+gem install mnogootex
+```
 
-Set up your `LaTeX` project as usual - let's say its main file is `~/project/main.tex` and contains `\documentclass{...}`.
+If you're upgrading from a previous version, execute
 
-Create a configuration file `~/project/.mnogootex.yml`
-containing the list of document classes you want to compile your
-project against:
+```bash
+gem update mnogootex
+```
 
-    jobs:
-      - scrartcl
-      - article
-      - book
-      
-Run `mnogootex go ~/project/main.tex` and enjoy the technicolor:
+and remove any mention of `mnogootex` from your shell profile (it's not needed anymore).
 
-![Demo TTY GIF](tty.gif?raw=true "Demo TTY GIF")
+### Quick start
+
+First you write a LaTeX document:
+
+```latex
+% ~/demo/ROOT.tex
+\documentclass{scrarticle}
+\begin{document}
+  \abstract{Simply put, my article is awesome.}
+  Let's port my \KOMAScript\ article to other classes!
+\end{document}
+```
+
+Then you list the desided classes in a Многоꙮтех configuration file:
+
+```yaml
+# ~/demo/.mnogootexrc
+jobs:
+  - scrartcl
+  - article
+  - book
+```
+
+Finally you run `mnogootex build` and enjoy the technicolor:
+
+![A user types `mnogootex build ROOT.tex` in the console. Some spinners indicating progress appear. Then the outcome for each class is presented. Failing ones include abridged and color coded logs, to pinpoint the errors.](demo/demo.gif?raw=true "TTY demo GIF")
 
 ## Usage
 
-In essence, Многоꙮтех
-1. takes the _source_ directory of a project, 
-2. clones it into _target_ directories (one for each _job_),
-3. applies a different source code transformation to each one and then
-4. attempts to compile them.
+A Многоꙮтех run does the following:
+1. copy the _source_ folder of a project to many _target_ folders, one for each _job_;
+2. replace the document class in the source of each _target_ folder with the name of the relative _job_;
+3. call `latexmk` in parallel on each _target_ folder to compile the documents (or do other tasks);
+4. wait for the outcomes and print the logs, filtered and colour-coded in a meaningful way.
 
 Its convenience lies in the fact that it
 * automates the setup process,
 * parallelizes compilation,
-* filters and colour codes the infamous waterfall logs and
-* allows you to easily navigate through targets/source folders. 
+* improves the readability of the infamous waterfall logs.
 
-Многоꙮтех can be invoked from commandline in two ways: `mnogootex` and `mnogoo`.
-The latter is more powerful and requires an extra [installation](#installation) step.
+Многоꙮтех can be invoked from CLI using `mnogootex`.
+It accepts various [commands](#mnogootex-commands) detailed below.
 
-Commands listed below can be passed to both unless otherwise stated.
+To leverage the full power of this tool you will need to learn writing [`mnogootex` configurations](#mnogootex-configuration) and ['latexmk' configurations](#latexmk-configuration).
+It might sound daunting but they're really just a few lines.
 
-### Commands
+### `mnogootex` commands
 
-> **NOTATION:** `[FOO]` means that _`FOO` is optional_ while `FOO ...` means _one or more `FOO`s_. 
+> **Notation:** `[FOO]` means that _`FOO` is optional_ while `FOO ...` means _one or more `FOO`s_.
+
+All commands except `help` accept the same parameters, so let's examine them in advance to avoid repeating ourselves later.
+Here is their syntax:
+
+```bash
+mnogootex COMMAND [JOB ...] [FLAG ...] ROOT
+```
+
+`JOB`s are the names of the document classes to compile your document with.
+Zero or more can be provided, and when none is given the job list is loaded from the [configuration](#jobs).
+
+`FLAG`s are `latexmk` options.
+Zero or more can be provided to override the behaviour of the `latexmk` call underlying the `mnogootex` command.
+You can obtain a list of available options with the inline help `latexmk --help`, and the full documentation with `man latexmk`.
+Generally speaking, if you find yourself always using a `FLAG` you should properly [configure `latexmk`](#latexmk-configuration) instead.
+
+The last mandatory parameter is the `ROOT` file for compiling of your document.
+
+Let's examine the details of each command now.
 
 #### `help [COMMAND]`
 
-Prints the help for `COMMAND` (or all commands if none is given).
+This command prints the help for `COMMAND` (or all commands if none is given).
 
-#### `go [JOB ...] [MAIN]`
+#### `exec [JOB ...] [FLAG ...] ROOT`
 
-Run given compilation `JOB`s for the `MAIN` document.
+This command simply runs `latexmk` on the `ROOT` document for each of your `JOB`s passing the given `FLAG`s.
 
-If no `JOB` list is given then all of them are run.
-They are deduced from the [configuration](#configuration).
+All other commands below are specializations of this one.
+However you'll seldom use it unless you're debugging.
 
-If no `MAIN` document is given then it's deduced from either
-your current working directory or the [configuration](#configuration).
+#### `build [JOB ...] [FLAG ...] ROOT`
 
-#### `dir [JOB] [MAIN]`
+This command builds your document.
 
-Print `JOB`'s temporary directory for the `MAIN` document.
+It is equivalent to `exec [JOB ...] -interaction=nonstopmode ROOT`.
 
-If no `JOB` is given then it prints the source directory.
+You will probably need to pass some `FLAG`s (e.g. to use the correct engine) but it is not recommended: [configure `latexmk`](#latexmk-configuration) instead.
 
-If no `MAIN` document is given then it's deduced from either
-your current working directory or the [configuration](#configuration).
+#### `open [JOB ...] [FLAG ...] ROOT`
 
-#### `clobber`
+This command opens the final compilation artifact (after running the build if necessary).
 
-Deletes all temporary files.
-Useful to free up some space from time to time.
+It is equivalent to `exec [JOB ...] -pv -interaction=nonstopmode ROOT`.
 
-#### `pdf [JOB ...] [MAIN]`
+You might need to pass some `FLAG`s (e.g. to use the correct viewer) but it is not recommended: [configure `latexmk`](#latexmk-configuration) instead.
 
-Print `JOB`'s output PDF path for the `MAIN` document.
+#### `clean [JOB ...] [FLAG ...] ROOT`
 
-If no `JOB` list is given then all their output PDFs paths are printed.
-They are deduced from the [configuration](#configuration).
+This command deletes all nonessential build files while keeping the compiled artifacts.
 
-If no `MAIN` document is given then it's deduced from either
-your current working directory or the [configuration](#configuration).
+It is equivalent to `exec [JOB ...] -c ROOT`.
 
-#### `open [JOB ...] [MAIN]`
+#### `clobber [JOB ...] [FLAG ...] ROOT`
 
-Open `JOB`'s output PDF for the `MAIN` document with your default viewer.
+This command deletes all nonessential build files including the compiled artifacts.
 
-If no `JOB` list is given then all their output PDFs are opened.
-They are deduced from the [configuration](#configuration).
+It is equivalent to `exec [JOB ...] -C ROOT`.
 
-If no `MAIN` document is given then it's deduced from either
-your current working directory or the [configuration](#configuration).
+### `mnogootex` configuration
 
-### Configuration
+`mnogootex` is configured through [`YAML`](https://learnxinyminutes.com/docs/yaml/)
+files named `.mnogootexrc` put into your projects' root directory.
 
-Многоꙮтех is configured through [`YAML`](https://learnxinyminutes.com/docs/yaml/)
-files named `.mnogootex.yml` put into your projects' root directory.
-
-When  loads a configuration it also looks up for `.mnogootex.yml`
+When `mnogootex` loads a configuration it also looks up for `.mnogootexrc`
 files in all parent directories to merge then together (from the
 shallowest to the deepest path).  This means that e.g. you can keep
 a configuration file in your home folder and use it as a global
 configuration for all you projects, while overwriting only specific
 options in the configuration files of each one.
 
-Многоꙮтех currently accepts two options.
+`mnogootex` currently accepts three options.
 
-#### `spinner`
+#### `jobs`
 
-This option is a string whose characters are the frames used to
-animate the spinners for the command line interface.
+This option represents the `JOB`s to build your document (when none are given via CLI).
 
-    # Default value:
-    spinner: ⣾⣽⣻⢿⡿⣟⣯⣷
+It must contain valid document class names, given as a list of strings.
+
+By default there are no `JOB`s:
+
+```yaml
+# Default value:
+jobs: []
+```
+
+Here is a slightly more interesting example:
+
+```yaml
+jobs:
+  - scrartcl
+  - article
+  - book
+```
 
 #### `work_path`
 
-This option is an override for the path where compilation happens.
+This option is the folder where all elaboration happens.
 
-    # Default value:
-    work_path: null
+It must be a well formed path, given as a string.
 
-By default each run happens in a new empty folder. Overriding this allows you to easily reach the compilation artifacts, but leaves handling cleanup and conflicts with previous runs up to you.
+By default none is given, meaning that each run of any given job happens in a dedicated temporary folder:
 
-## Contributing
+```yaml
+# Default value:
+work_path: null
+```
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/paolobrasolin/mnogootex. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Overriding this allows you to have easier access to the compilation artifacts.
+A good choice is setting it to `./build` and keep everything below your source folder:
 
-## License
+```yaml
+work_path: ./build
+```
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+#### `spinner`
 
-## Code of Conduct
+This option is the spinner animation shown by the CLI.
 
-Everyone interacting in the многоꙮтех project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/paolobrasolin/mnogootex/blob/master/CODE_OF_CONDUCT.md).
+It is a series of frames given as characters of a string.
+
+By default it's a hole looping around in a blister:
+
+```yaml
+# Default value:
+spinner: ⣾⣽⣻⢿⡿⣟⣯⣷
+```
+
+Here is a couple more in case your terminal doesn't like Unicode:
+
+```yaml
+# A wriggly ASCII worm:
+spinner: )}]|[{({[|]}
+# An extended ASCII boomerang:
+spinner: ╒┍┌┎╓╖┒┐┑╕╛┙┘┚╜╙┖└┕╘
+```
+
+Feel free to get creative!
+
+### `latexmk` configuration
+
+`latexmk` is configured through [`Perl`](https://www.perl.org/)
+files named `.latexmkrc` put into your projects' root directory.
+
+When `latexmk` loads a configuration it also looks up for `.latexmkrc`
+files in all parent directories to merge then together (from the
+shallowest to the deepest path).  This means that e.g. you can keep
+a configuration file in your home folder and use it as a global
+configuration for all you projects, while overwriting only specific
+options in the configuration files of each one.
+
+`latexmk` has a gazillion of options.
+We'll just skim over the most common ones here.
+
+First of all, one must pick the correct engine.
+Assuming you want to produce a PDF artifact, you have a few choices:
+
+```perl
+$pdf_mode = 1; # create PDF with pdflatex
+# $pdf_mode = 2; # create PDF with ps2pdf (via PS)
+# $pdf_mode = 3; # create PDF with dvipdf (via DVI)
+# $pdf_mode = 4; # create PDF with lualatex
+# $pdf_mode = 5; # create PDF with xelatex
+```
+
+Then, if your PDF previewer is not being detected, you might need to configure it.
+Assuming you want to use evince:
+
+```perl
+$pdf_previewer = 'start evince';
+```
+
+Most people won't probably need anything more than that.
+However, for further details read the documentation in the commandline with `man latexmk` or on [CTAN](https://ctan.mirror.garr.it/mirrors/ctan/support/latexmk/latexmk.txt)
+
+## Acknowledgements
+
+* Thanks to [@tetrapharmakon](https://github.com/tetrapharmakon) for being the first tester and user.

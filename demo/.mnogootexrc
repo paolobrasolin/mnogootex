@@ -1,0 +1,4 @@
+jobs:
+  - scrarticle
+  - article
+  - book
