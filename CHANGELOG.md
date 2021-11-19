@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2021-11-19
+
 ### Added
 
 - `exec` command to run `latexmk` directly.
@@ -46,7 +48,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First public release.
 
-[unreleased]: https://github.com/paolobrasolin/mnogootex/compare/v1.1.0...HEAD
+[unreleased]: https://github.com/paolobrasolin/mnogootex/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/paolobrasolin/mnogootex/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/paolobrasolin/mnogootex/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/paolobrasolin/mnogootex/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/paolobrasolin/mnogootex/releases/tag/v1.0.0
