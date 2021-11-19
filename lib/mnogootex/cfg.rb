@@ -8,7 +8,10 @@ require 'mnogootex/core_ext'
 module Mnogootex
   module Cfg
     BASENAME = '.mnogootex.yml'
-    DEFAULTS = YAML.load_file(Pathname.new(__dir__).join('defaults.yml'))
+    DEFAULTS = {
+      'spinner' => '⣾⣽⣻⢿⡿⣟⣯⣷',
+      'work_path' => nil,
+    }
 
     def self.load_descending(pathname:, basename:)
       pathname.realpath.descend.
