@@ -5,10 +5,11 @@ require 'pathname'
 
 module Mnogootex
   module Cfg
-    BASENAME = '.mnogootex.yml'
+    BASENAME = '.mnogootexrc'
     DEFAULTS = {
+      'jobs' => [],
       'spinner' => '⣾⣽⣻⢿⡿⣟⣯⣷',
-      'work_path' => nil
+      'work_path' => nil,
     }.freeze
 
     def self.load_descending(pathname:, basename:)
@@ -56,7 +57,7 @@ module Mnogootex
       end
 
       def try_cfgs(*args)
-        yaml = Pathname.pwd.ascend.map { |p| p.join('.mnogootex.yml') }.detect(&:file?)
+        yaml = Pathname.pwd.ascend.map { |p| p.join('.mnogootexrc') }.detect(&:file?)
         return if yaml.nil?
 
         cfg = load_descending(pathname: yaml.dirname, basename: BASENAME)

@@ -40,7 +40,7 @@ module Mnogootex
       private
 
       def remove_configuration(folder_path)
-        path = folder_path.join('.mnogootex.yml')
+        path = folder_path.join('.mnogootexrc')
         path.delete if path.file?
       end
 

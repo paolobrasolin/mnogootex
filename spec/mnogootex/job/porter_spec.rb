@@ -76,7 +76,7 @@ describe Mnogootex::Job::Porter do
     before do
       test_dir.join('A', 'B').mkpath
       test_dir.join('A', 'main.file').write('')
-      test_dir.join('A', '.mnogootex.yml').write('')
+      test_dir.join('A', '.mnogootexrc').write('')
       test_dir.join('A', '.dotfile').write('')
       test_dir.join('A', 'B', 'ancillary.file').write('')
     end
@@ -89,9 +89,9 @@ describe Mnogootex::Job::Porter do
     end
 
     it 'ignores configuration file' do
-      test_dir.join('A', '.mnogootex.yml').unlink
+      test_dir.join('A', '.mnogootexrc').unlink
       subject.provide
-      expect(subject.target_dir.join('.mnogootex.yml')).to_not exist
+      expect(subject.target_dir.join('.mnogootexrc')).to_not exist
     end
 
     it 'creates link to source' do
@@ -108,7 +108,7 @@ describe Mnogootex::Job::Porter do
     it 'copies all source files' do
       subject.provide
       subject.target_dir.join('.mnogootex.src').unlink
-      source_path.dirname.join('.mnogootex.yml').unlink
+      source_path.dirname.join('.mnogootexrc').unlink
       # NOTE: unlinking so comparison is easier to write
       expect(relative_subtree(source_path.dirname)).
         to eq(relative_subtree(subject.target_dir))
