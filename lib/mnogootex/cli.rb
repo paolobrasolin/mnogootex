@@ -10,49 +10,45 @@ require 'mnogootex/cfg'
 
 module Mnogootex
   class CLI < Thor
-    desc 'exec [JOB ...] [LATEXMK_OPTION ...] MAIN',
-         'Execute latexmk on each (or every) JOB with the given LATEXMK_OPTION for MAIN document'
+    desc 'exec [JOB ...] [FLAG ...] ROOT',
+         'Execute latexmk with FLAGs on each JOB for ROOT document'
     def exec(*args)
-      jobs, flags, main, cfg = Mnogootex::Cfg.recombobulate(*args)
-      # flags are read from the commandline given by the user
-      cfg = Mnogootex::Cfg::DEFAULTS.merge(cfg).merge({ 'jobs' => jobs }.compact)
-      Mnogootex::Job::Warden.new(source: main, configuration: cfg, flags: flags).start
+      execute_latexmk(*args, default_flags: [])
     end
 
-    desc 'go [JOB ...] MAIN',
-         'Run each (or every) JOB for MAIN document'
-    def go(*args)
-      jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
-      flags = ['-pdf', '-interaction=nonstopmode']
-      cfg = Mnogootex::Cfg::DEFAULTS.merge(cfg).merge({ 'jobs' => jobs }.compact)
-      Mnogootex::Job::Warden.new(source: main, configuration: cfg, flags: flags).start
+    desc 'build [JOB ...] [FLAG ...] ROOT',
+         'Build each JOB for ROOT document'
+    def build(*args)
+      execute_latexmk(*args, default_flags: ['-interaction=nonstopmode'])
     end
 
-    desc 'open [JOB ...] MAIN',
-         'Open PDF of each (or every) JOB for MAIN document'
+    desc 'open [JOB ...] [FLAG ...] ROOT',
+         '(Build and) open the artifact of each JOB for ROOT document'
     def open(*args)
-      jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
-      flags = ['-pv', '-interaction=nonstopmode']
-      cfg = Mnogootex::Cfg::DEFAULTS.merge(cfg).merge({ 'jobs' => jobs }.compact)
-      Mnogootex::Job::Warden.new(source: main, configuration: cfg, flags: flags).start
+      execute_latexmk(*args, default_flags: ['-interaction=nonstopmode', '-pv'])
     end
 
-    desc 'clean [JOB ...] MAIN',
-         'Delete temporary files on each (or every) JOB for MAIN document'
+    desc 'clean [JOB ...] [FLAG ...] ROOT',
+         'Delete nonessential files of each JOB for ROOT document'
     def clean(*args)
-      jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
-      flags = ['-c', '-interaction=nonstopmode']
-      cfg = Mnogootex::Cfg::DEFAULTS.merge(cfg).merge({ 'jobs' => jobs }.compact)
-      Mnogootex::Job::Warden.new(source: main, configuration: cfg, flags: flags).start
+      execute_latexmk(*args, default_flags: ['-c'])
     end
 
-    desc 'clobber [JOB ...] MAIN',
-         'Delete temporary files and artifacts on each (or every) JOB for MAIN document'
+    desc 'clobber [JOB ...] [FLAG ...] ROOT',
+         'Delete nonessential files and artifacts of each JOB for ROOT document'
     def clobber(*args)
-      jobs, _, main, cfg = Mnogootex::Cfg.recombobulate(*args)
-      flags = ['-C', '-interaction=nonstopmode']
-      cfg = Mnogootex::Cfg::DEFAULTS.merge(cfg).merge({ 'jobs' => jobs }.compact)
-      Mnogootex::Job::Warden.new(source: main, configuration: cfg, flags: flags).start
+      execute_latexmk(*args, default_flags: ['-C'])
+    end
+    
+    desc 'help [COMMAND]',
+         'Describe available commands or one specific COMMAND'
+    def help(*args)
+      super
+
+      puts <<~EXTRA_HELP
+        JOBs are document class names. The default is the whole list in your configuration file.
+        FLAGs are options passed to latexmk. Please refer to `latexmk -help` for details.
+      EXTRA_HELP
     end
 
     # desc 'purge',
@@ -96,5 +92,14 @@ module Mnogootex
     #   jobs.map! { |porter| porter.target_path.sub_ext('.pdf') }
     #   puts jobs
     # end
+
+  private
+
+    def execute_latexmk(*args, default_flags: [])
+      jobs, flags, main, cfg = Mnogootex::Cfg.recombobulate(*args)
+      cfg = Mnogootex::Cfg::DEFAULTS.merge(cfg).merge({ 'jobs' => jobs }.compact)
+      flags = [*default_flags, *flags]
+      Mnogootex::Job::Warden.new(source: main, configuration: cfg, flags: flags).start
+    end
   end
 end
